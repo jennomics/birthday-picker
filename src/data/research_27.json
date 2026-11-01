@@ -1,0 +1,41 @@
+{
+  "name": "Six Flags Magic Mountain",
+  "type": "theme park",
+  "neighborhood": "Valencia, Santa Clarita",
+  "address": "26101 Magic Mountain Pkwy, Valencia, CA 91355",
+  "what_it_is": "A roller-coaster-focused theme park just off Interstate 5 in Valencia, north of Los Angeles, that holds the Guinness record for the most roller coasters at a single park. In late November through early January it runs the Holiday in the Park lights-and-shows event, included with regular admission.",
+  "facts": [
+    "20 roller coasters, the most of any theme park in the world (Guinness World Records, set when Wonder Woman: Flight of Courage opened in July 2022).",
+    "Next new coaster is Thrill Glider, a Vekoma multi-launch suspended 'hovercycle' coaster announced Sept 10, 2026: 107 ft tall, 50 mph, 3,380 ft of track, five inversions, 48-inch minimum height. It was delayed from 2026 and now opens in 2027, so it will NOT be running on a Dec 2026 / Jan 2027 visit (construction is visible near Looney Tunes Land).",
+    "Headline coasters and their height minimums: X2 (48 in), Twisted Colossus (48 in), Tatsu flying coaster (54 in). An average 16-year-old clears all of them.",
+    "Holiday in the Park 2026-27 runs on select dates Nov 26, 2026 through Jan 3, 2027 per the official events page; light displays, live shows and most rides are included with park admission (food, merchandise and some holiday add-ons cost extra).",
+    "Chaperone policy: guests 15 and under must be with a chaperone aged 21+ from 4:00 PM daily, and the chaperone shows government photo ID at entry. A 16-year-old is outside the rule but third-party guides say guests 16+ may be asked for ID.",
+    "Bag screening: the park has x-rayed all bags and limited bag size to 12 x 12 x 6 inches during Fright Fest (announced Oct 2022); whether that limit is in force in Dec 2026 is unconfirmed, so bring a small bag."
+  ],
+  "price": "Single-day ticket: online from $55, gate price $110 (sixflags.com daily-tickets page, Oct 2026; price varies by date, taxes may apply). Parking is extra: third-party guides in 2026 report general parking from about $40 (prepaying online is cheaper), with preferred and front-gate tiers higher; exact parking rates not confirmed on the official site.",
+  "hours_note": "Hours vary by date; the park runs a seasonal calendar and the official December 2026 day-by-day schedule was not yet confirmed as of 2026-10-31. Holiday in the Park is listed as select dates Nov 26, 2026 - Jan 3, 2027 (official events page, retrieved 2026-10-31); third-party listings suggest Dec 7-10 are likely non-event days. Check the sixflags.com/magicmountain calendar for exact days and closing times before buying date-specific tickets.",
+  "age_note": "No general age minimum; rides are gated by height (most big coasters 48 in, Tatsu 54 in). The chaperone policy applies to guests 15 and under after 4 PM (chaperone must be 21+ with photo ID), so a 16-year-old with a parent is fully covered; carry ID for the teen in case staff ask.",
+  "booking_note": "Buy date-specific tickets online in advance (online from $55 vs $110 at the gate) and prepay parking online. Holiday in the Park is included with admission, no separate event ticket needed. Official calendar hours for Dec 2026 were not posted at research time, so confirm the visit date is an operating day.",
+  "website": "https://www.sixflags.com/magicmountain",
+  "sources": [
+    "https://www.sixflags.com/magicmountain/events",
+    "https://www.sixflags.com/magicmountain/events/holiday-in-the-park",
+    "https://sixflags.com/magicmountain/daily-tickets",
+    "https://www.sixflags.com/magicmountain/code-of-conduct",
+    "https://www.sixflags.com/magicmountain/directions",
+    "https://www.sixflags.com/blog/thrill-roller-coaster-guide-to-six-flags-magic-mountain",
+    "https://www.guinnessworldrecords.com/world-records/69225-most-roller-coasters-in-one-theme-park",
+    "https://www.themeparkinsider.com/flume/202609/12657/",
+    "https://attractionsmagazine.com/six-flags-magic-mountains-thrill-glider-coaster-announced/",
+    "https://www.eap-magazin.de/Article/Six-Flags-Magic-Mountain-Announces-World%E2%80%99s-First-Thrillglider.html",
+    "https://ktla.com/news/theme-parks/suspended-motorbike-coaster-could-be-coming-to-six-flags-magic-mountain-in-2026/amp",
+    "https://abc7.com/post/flags-magic-mountain-implements-new-chaperone-policy-fright-fest-extreme-nights/15260681/",
+    "https://www.laughingplace.com/w/news/2022/10/07/new-bag-policy-in-effect-at-six-flags-magic-mountain/",
+    "https://en.wikipedia.org/wiki/Tatsu",
+    "https://en.wikipedia.org/wiki/Twisted_Colossus",
+    "https://www.undercovertourist.com/los-angeles/six-flags-magic-mountain/x2/",
+    "https://thebettervacation.com/los-angeles/six-flags-magic-mountain/",
+    "https://www.thepricer.org/how-much-does-a-six-flags-ticket-cost/",
+    "https://thrillzing.com/seasonal-events/holiday-in-the-park-2026-six-flags-magic-mountain/"
+  ]
+}

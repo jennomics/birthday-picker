@@ -1,0 +1,243 @@
+[
+  {
+    "name": "Sunday's Best Vintage",
+    "type": "vintage/thrift",
+    "neighborhood": "Echo Park",
+    "address": "1557 Sunset Blvd, Los Angeles, CA 90026",
+    "what_it_is": "A small vintage and thrift clothing store on Sunset Blvd in Echo Park, named after the resident shop cat, Sunday.",
+    "facts": [
+      "The store is named after its resident cat, Sunday, who oversees the shop from her own cubby.",
+      "Clothing is color-coded and organized by size, with a men's side and a women's side.",
+      "A local thrift guide notes items under $10 throughout the store and a $1 rack out front.",
+      "Thrift guides list it among the best thrift stores in the Silver Lake / Echo Park / Atwater area.",
+      "Review sites rate it around 4.6 to 4.7 stars."
+    ],
+    "price": "Budget thrift; many items under $10, $1 rack out front (per a local thrift guide)",
+    "hours_note": "Third-party listings show 11:30 AM to 7 PM daily; not confirmed from the store itself",
+    "age_note": "No age restrictions found; retail store",
+    "booking_note": "Walk in",
+    "sources": [
+      "https://www.zola.com/wedding/maggieandharper/poi",
+      "https://lavintagemap.com/store/sundays-best-vintage/",
+      "https://lexysilverstein.com/blog/thrift-guide-silver-lake/",
+      "https://www.corner.inc/place/74635?listId=2217be7b-f49e-4fab-9054-99f021a70090",
+      "https://sundays-best-vintage.wheree.com/"
+    ]
+  },
+  {
+    "name": "Hairrari LA",
+    "type": "hair salon",
+    "neighborhood": "Echo Park",
+    "address": "1708 W Sunset Blvd, Los Angeles, CA 90026",
+    "what_it_is": "The Los Angeles location of Hairrari, a gender-neutral barbershop and salon that started in New York City. It is known for gender-affirming haircuts and an LGBTQ+-friendly vibe.",
+    "facts": [
+      "Hairrari describes itself as a gender-neutral barbershop with locations in New York City and Los Angeles (Echo Park).",
+      "Hairrari was founded in 2011 by Magda Ryczko and is woman-, immigrant- and queer-owned.",
+      "The shop offers gender-affirming haircuts for trans and LGBTQ+ clients.",
+      "A directory listing says the salon offers free or low-cost haircuts for trans youth within a certain age range.",
+      "Third-party listings put haircuts starting around $45, with higher prices for more complex services."
+    ],
+    "price": "$$; third-party listings say haircuts start around $45 (not confirmed by the business)",
+    "hours_note": "Official site lists Mon-Fri 11 AM-7 PM, Sat 9 AM-7 PM, Sun 9 AM-6 PM, but that page may be several years old",
+    "booking_note": "Book online via the 'Book Los Angeles' link on hairrari.com or hairrarila.resurva.com/book; phone 213-322-2212",
+    "website": "https://hairrari.com/",
+    "sources": [
+      "https://hairrari.com/",
+      "https://hairrari.com/contact-la",
+      "https://www.atly.com/location/HairrariLA",
+      "https://www.poyst.com/business/hairrari-la",
+      "https://www.facebook.com/HairrariEchoPark/",
+      "https://www.beautylaunchpad.com/business/news/news/21533498/hairrari-sets-the-stage-for-genderneutral-barbershops"
+    ]
+  },
+  {
+    "name": "Kinokuniya Los Angeles (Little Tokyo flagship)",
+    "type": "bookstore",
+    "neighborhood": "Little Tokyo",
+    "address": "101 San Pedro St, Los Angeles, CA 90012 (ground floor, Kajima Building)",
+    "what_it_is": "The Los Angeles flagship of Japan's Kinokuniya bookstore chain, selling Japanese and English books, manga, magazines, stationery and goods. It closed its longtime Weller Court space in July 2025 and reopened in 2026 at a new, larger Little Tokyo location.",
+    "facts": [
+      "The store moved out of Weller Court (its home since 1980) on July 21, 2025, and reopened in 2026 on the ground floor of the Kajima Building at 101 San Pedro St.",
+      "The new flagship is about 14,000 square feet, more than double the size of the old Weller Court store.",
+      "The store sells books, magazines, stationery and general goods, and Kinokuniya is known for its large manga selection in both English and Japanese.",
+      "Kinokuniya first opened in Los Angeles in 1977 inside the New Otani Hotel in Little Tokyo.",
+      "A second downtown store at THE BLOC (700 W 7th St, G210) started as a 2025 pop-up and is becoming a permanent location."
+    ],
+    "price": "Free to browse",
+    "hours_note": "April 2026 press release lists 10 AM-8 PM for the new store; confirm before visiting",
+    "age_note": "All ages",
+    "booking_note": "Walk in",
+    "sources": [
+      "https://rafu.com/2026/05/kinokuniya-l-a-expected-to-reopen-in-june/",
+      "https://rafu.com/2026/08/opening-of-kinokuniya-at-new-little-tokyo-location-celebrated/",
+      "https://www.culturalnews.com/?p=49252",
+      "https://kyodonewsprwire.jp/release/202604217847",
+      "https://rafu.com/2026/05/kinokuniya-pop-up-shop-in-little-tokyo-closes-due-to-relocation/",
+      "https://www.timeout.com/los-angeles/shopping/kinokuniya-bookstore",
+      "https://www.pw.org/literary_places/kinokuniya_los_angeles"
+    ]
+  },
+  {
+    "name": "The Groundlings Theatre & School",
+    "type": "theater",
+    "neighborhood": "Melrose / Fairfax",
+    "address": "7307 Melrose Ave, Los Angeles, CA 90046",
+    "what_it_is": "A legendary improv and sketch comedy theater and school, considered the West Coast counterpart to Chicago's Second City. Many Saturday Night Live cast members trained here.",
+    "facts": [
+      "The Groundlings was founded in 1974 by Gary Austin, and the company bought the Melrose Ave building in 1975; the theater opened to audiences in April 1979.",
+      "Alumni include Phil Hartman, Paul Reubens (Pee-wee Herman), Laraine Newman and the creators of 'Bridesmaids' and 'Romy and Michele's High School Reunion'.",
+      "Since Laraine Newman was cast in 1975, Groundlings alumni have had a major influence on Saturday Night Live.",
+      "Shows are a mix of sketch comedy and improv; the Thursday all-improv show has run for over 20 years with the Main Company, Alumni and Sunday Company.",
+      "The Sunday Company, formed in 1982, is where performers coming up through the school develop before the Main Company.",
+      "Past ticket prices have ranged from about $16 to $28 depending on the show; there is no late seating and no refunds or exchanges."
+    ],
+    "price": "Past listings show roughly $16-$28 per ticket depending on the show (2015-2023 data)",
+    "age_note": "No venue-wide age policy found; one third-party listing for 'The Completely Different Late Show' at this venue says ages 16 and up",
+    "booking_note": "Tickets at groundlings.com, the box office, or by phone at (323) 934-4747",
+    "website": "https://groundlings.com/",
+    "sources": [
+      "https://en.wikipedia.org/wiki/The_Groundlings",
+      "https://groundlings.com/about/history",
+      "https://www.aol.com/news/groundlings-alumni-look-back-50-100000817.html",
+      "https://www.backstage.com/magazine/article/the-groundlings-50-year-anniversary-77853/",
+      "https://stageandcinema.com/2021/07/15/reopening-the-groundlings-theatre/",
+      "https://wehoonline.com/2023/08/23/win-tickets-groundlings-saturday-aug-26/",
+      "https://www.todaytix.com/los-angeles/shows/1698-the-completely-different-late-show",
+      "https://www.theatermania.com/shows/california-theater/los-angeles-theater/st-groundlings-orphanage_182489/"
+    ]
+  },
+  {
+    "name": "The Iliad Bookshop",
+    "type": "bookstore",
+    "neighborhood": "North Hollywood",
+    "address": "5400 Cahuenga Blvd, North Hollywood, CA 91601",
+    "what_it_is": "One of the largest used bookstores in the Los Angeles area, specializing in literature and the arts, with resident shop cats.",
+    "facts": [
+      "The shop stocks more than 100,000 used books, with a focus on literature and the arts.",
+      "Two resident cats, Apollo and Zeus, live in the store.",
+      "It is named after Homer's epic and moved to its current Cahuenga Blvd location in 2006 (it used to sit next to Odyssey Video).",
+      "In November 2022 a fire at the entrance damaged the exterior; neighbors and patrons rallied with support and a GoFundMe, and the owner ran a trial reopening the next day.",
+      "The owner is Dan Weinstein."
+    ],
+    "price": "Used-book bargains; free to browse",
+    "hours_note": "Most directory listings show Tue-Sat 11 AM-7 PM, closed Sun-Mon; not confirmed from the store",
+    "age_note": "All ages",
+    "booking_note": "Walk in; phone (818) 509-2665",
+    "sources": [
+      "https://en.wikipedia.org/wiki/The_Iliad_Bookshop",
+      "https://newpages.com/bookstore/north-hollywood-the-iliad-bookshop",
+      "https://www.timeout.com/los-angeles/shopping/the-iliad-bookshop",
+      "https://abc7.com/iliad-bookshop-bookstore-books/12428338/",
+      "https://knock-la.com/local-bookstore-recovering-after-apparent-arson-attack/",
+      "https://www.shelf-awareness.com/theshelf/2022-11-08/iliad_bookshop_los_angeles_calif._damaged_by_arsonist.html",
+      "https://maps.roadtrippers.com/us/ca/shopping/the-iliad-bookshop"
+    ]
+  },
+  {
+    "name": "Hamburger Mary's West Hollywood",
+    "type": "restaurant",
+    "neighborhood": "West Hollywood",
+    "address": "8288 Santa Monica Blvd, West Hollywood, CA 90046",
+    "what_it_is": "A campy burger restaurant and bar famous for its weekend drag brunches and drag shows. The West Hollywood location is the oldest Hamburger Mary's still operating.",
+    "facts": [
+      "Drag brunch runs every Saturday and Sunday with multiple seatings, burgers and a live drag show.",
+      "The West Hollywood location is described as the oldest Hamburger Mary's still operating.",
+      "Signature menu items associated with the chain include 'Mary's Hot Legs' and 'Love Me Tenders'.",
+      "Reviewers describe the brunch crowd as packed with all types of people and ages.",
+      "Bottomless mimosa options are offered for adults at brunch."
+    ],
+    "hours_note": "Third-party listing shows open 11 AM daily until around midnight; confirm with the restaurant",
+    "age_note": "No official age policy found. User-generated answers (Tripadvisor, Yelp) say the drag brunch is all ages and kids and teens attend with parents, though some humor is adult-oriented; some Yelp answers say evening drag shows may be 18+. Call (323) 654-3800 to confirm before bringing a minor.",
+    "booking_note": "Reservations recommended for drag brunch; bookable via OpenTable, Resy or Ticketmaster (Saturday Drag Brunch tickets)",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Hamburger_Mary%27s",
+      "https://www.timeout.com/los-angeles/restaurants/hamburger-marys",
+      "https://outxout.com/event/hm-drag-brunch-a4aed2e1",
+      "https://www.tripadvisor.com/FAQ_Answers-g33252-d534004-t3550733-Is_Sunday_s_drag_brunch_all_ages.html",
+      "https://www.yelp.com/questions/hamburger-marys-west-hollywood-do-you-have-to-be-21-to-see-the-drag-show/fSfU55l8CulkUzG5TCMiZQ",
+      "https://www.opentable.com/r/hamburger-marys-west-hollywood",
+      "https://resy.com/cities/los-angeles-ca/venues/hamburger-marys-ca",
+      "https://www.ticketmaster.com/hamburger-marys-west-hollywood-tickets-west-hollywood/venue/74852",
+      "https://instinctmagazine.com/inside-my-truly-wonderful-first-experience-at-hamburger-marys/",
+      "https://www.discoverlosangeles.com/eat-drink/hamburger-marys",
+      "https://atmosfy.io/location/hollywood/hamburger-mary-s-218316"
+    ]
+  },
+  {
+    "name": "Pickwick Vintage Show",
+    "type": "vintage market",
+    "neighborhood": "Downtown LA (Arts District / ROW DTLA)",
+    "address": "ROW DTLA, 777 S Alameda St, Los Angeles, CA 90021",
+    "what_it_is": "A recurring (roughly monthly) curated vintage market held at ROW DTLA, with dozens of local vintage vendors selling clothing, jewelry, accessories and textiles.",
+    "facts": [
+      "The show brings together 40 to 50+ local vintage vendors selling clothing, jewelry, accessories and textiles.",
+      "Shows typically run 10 AM to 4 PM on a Saturday; a 2026 listing had a July 11 show and an August 8 'final summer show'.",
+      "Past events used tiered entry: early-bird tickets (around $20) at 10 AM and general admission (around $10) at noon.",
+      "Advance tickets are recommended because time slots can sell out, with limited tickets at the door.",
+      "Pickwick also runs a sister show at the Ferry Building in San Francisco."
+    ],
+    "price": "Past listings: tickets from $10 general / about $20 early bird; one Aug 2026 listing said free, so check the current event page",
+    "hours_note": "Event days only, typically Saturday 10 AM-4 PM; no upcoming date confirmed as of Oct 31, 2026",
+    "age_note": "No age restrictions found",
+    "booking_note": "Buy tickets in advance via the organizer (Instagram @pickwickvintage) or ROW DTLA event listings",
+    "sources": [
+      "https://www.timeout.com/los-angeles/shopping/pickwick-vintage-show",
+      "https://uncoverla.com/2026/07/08/best-los-angeles-events-july-2026/",
+      "https://ma.to/event/pickwick-vintage-show-08-aug-2026",
+      "https://ma.to/event/pickwick-vintage-market-08-aug-2026",
+      "https://uncoverla.com/2023/11/04/best-los-angeles-events-november-1-3",
+      "https://larchmontbuzz.com/larchmont-village-events/the-week-ahead-events-for-april-9-15-2022/",
+      "https://www.worldjournal.com/wj/amp/story/124181/9196479",
+      "https://www.discoverlosangeles.com/things-to-do/the-best-vintage-stores-in-la-for-fancy-parties"
+    ]
+  },
+  {
+    "name": "The Flamingo Lounge",
+    "type": "hair salon",
+    "neighborhood": "Highland Park",
+    "address": "5935 York Blvd, Los Angeles, CA 90042",
+    "what_it_is": "An alternative hair salon in Highland Park with retro, Y2K-inspired decor, offering haircuts, vivid color, flash tattoos and tooth gems. It is a salon, not a bar or lounge.",
+    "facts": [
+      "It is a hair salon with retro, Y2K-inspired decor, not a bar.",
+      "Services include haircuts, blonding, rainbow color, extensions, blowouts, brow and lash treatments, flash tattoos ('malltats') and tooth gems.",
+      "Haircuts start at $25 and flash tattoos start at $50, per the salon's booking page.",
+      "Founder Jessica Ruby Spratt is a bi-coastal stylist and educator with over 15 years of experience.",
+      "The salon is LGBTQ+ friendly and has on-site parking."
+    ],
+    "price": "Haircuts from $25; flash tattoos from $50",
+    "hours_note": "Salon's page says closed Mondays; listed hours vary by source, confirm before going",
+    "age_note": "No age policy found for haircuts; tattoos and tooth gems may have their own age requirements, ask the salon",
+    "booking_note": "Book online via the salon's GlossGenius page; phone (213) 222-6918",
+    "website": "https://flamingoloungehair.glossgenius.com/",
+    "sources": [
+      "https://flamingoloungehair.glossgenius.com/",
+      "https://flamingoloungehair.glossgenius.com/about",
+      "https://flamingoloungehair.glossgenius.com/services",
+      "https://www.yelp.com/biz/the-flamingo-lounge-los-angeles",
+      "https://www.atly.com/location/TheFlamingoLounge"
+    ]
+  },
+  {
+    "name": "Little Shop of Hairdos",
+    "type": "hair salon",
+    "neighborhood": "Downtown Upland",
+    "address": "172 N 2nd Ave, Upland, CA 91786",
+    "what_it_is": "A well-reviewed neighborhood hair salon in downtown Upland known for vivid color work and a fun vibe.",
+    "facts": [
+      "Reviewers praise the salon for vivid colors, color corrections and creative 'hair art'.",
+      "Yelp shows about 194 reviews with a 4.2-star rating, and Facebook shows a 90 percent recommend rate.",
+      "Reviewers describe a great vibe and say stylists are good with kids and teens.",
+      "The salon is by appointment only.",
+      "It is listed in the City of Upland's Discover Upland business directory."
+    ],
+    "price": "$$ on Yelp; reviewers call prices very reasonable",
+    "hours_note": "Yelp listing shows 10 AM-7 PM; hours vary by source, confirm before going",
+    "booking_note": "By appointment only",
+    "sources": [
+      "https://upland-ca.yiftee.com/business/little-shop-of-hairdos-528034",
+      "https://www.yelp.com/biz/little-shop-of-hairdos-upland",
+      "https://www.facebook.com/LittleShopOfHairdos/",
+      "https://local.yahoo.com/info-20764812-little-shop-of-hairdos-upland/"
+    ]
+  }
+]

@@ -1,0 +1,210 @@
+[
+ {
+  "id": "0E56A9FCD442BA7DA218",
+  "mid": "/g/11b75lb09s",
+  "fid": "0x80c2c71cedd0f6d5:0xd3da3f02f13ad08d",
+  "lat": 34.0767067,
+  "lon": -118.2568355,
+  "name": "Sunday's Best Vintage"
+ },
+ {
+  "id": "03F7A9828C42BA7E36B5",
+  "mid": "/g/11nmlb3qzn",
+  "fid": "0x80c2c727232623a5:0xfc06c80b491a0ff5",
+  "lat": 34.0772148,
+  "lon": -118.2588645,
+  "name": "Hairrari LA"
+ },
+ {
+  "id": "0EB804E85542BA83CF6F",
+  "mid": "/g/1tkjlglb",
+  "fid": "0x80c2c6488ea39f65:0x3ec280effc75da90",
+  "lat": 34.0502444,
+  "lon": -118.2412914,
+  "name": "Kinokuniya Bookstore - Los Angeles"
+ },
+ {
+  "id": "035C7DE6D242BA8BCEEC",
+  "mid": "/g/11b5wgbx5g",
+  "fid": "0x80c2bed520f06b3b:0x8039160be1ca93a9",
+  "lat": 34.0838052,
+  "lon": -118.3490356,
+  "name": "The Groundlings Theatre & School"
+ },
+ {
+  "id": "04C41E981642BA917616",
+  "mid": "/g/1tdnfj0g",
+  "fid": "0x80c2958ef84f9a6d:0x2bde9c2cec7754e4",
+  "lat": 34.168883,
+  "lon": -118.3612203,
+  "name": "The Iliad Bookshop"
+ },
+ {
+  "id": "0666892DEC42C4784BAD",
+  "mid": "/g/1vnnjnvs",
+  "fid": "0x80c2beb885277d01:0x1eb80bbd3338fd4a",
+  "lat": 34.0905374,
+  "lon": -118.3701139,
+  "name": "Hamburger Mary's WeHo"
+ },
+ {
+  "id": "0922942AFB42C478D0E0",
+  "mid": "/g/11pz07b_b8",
+  "fid": "0x80c2c7f22d493dc3:0x9be887a7bfb4cd41",
+  "lat": 34.0341982,
+  "lon": -118.2408182,
+  "name": "Pickwick Vintage Show"
+ },
+ {
+  "id": "0E97C17C1A42C479B9C6",
+  "mid": "/g/11y4xgqcts",
+  "fid": "0x80c2c5dc83dd0f0f:0x1da4ac84e0538ca",
+  "lat": 34.1184655,
+  "lon": -118.1894715,
+  "name": "The Flamingo Lounge"
+ },
+ {
+  "id": "00ACC2DC0242C47A40B1",
+  "mid": "/g/1tmxww88",
+  "fid": "0x80c33153f7a3c043:0x783593cb2f38a00b",
+  "lat": 34.0957097,
+  "lon": -117.6482721,
+  "name": "Little Shop of Hairdos The Salon"
+ },
+ {
+  "id": "0F7FFA2E5742C47B3762",
+  "mid": "/m/0272b5c",
+  "fid": "0x80c2c65218959961:0xfb9f790c2c2dfc0d",
+  "lat": 34.0579743,
+  "lon": -118.2475585,
+  "name": "Ahmanson Theatre"
+ },
+ {
+  "id": "0DFF6CE96842C47DD4EB",
+  "mid": "/m/0k35w6n",
+  "fid": "0x80c2c0fe6634bf73:0x6e03a812cf6eae49",
+  "lat": 34.149594,
+  "lon": -118.081141,
+  "name": "A Noise Within Theatre"
+ },
+ {
+  "id": "010BDA901042C47E7344",
+  "mid": "/g/11dxjx84qh",
+  "fid": "0x80c2c7b4ccf6eed3:0x495d810a15856dbc",
+  "lat": 34.0485509,
+  "lon": -118.2531554,
+  "name": "Holiday Ice Rink"
+ },
+ {
+  "id": "0F4A39BBE442C483ADEF",
+  "mid": "/g/11klf0m78x",
+  "fid": "0x80c2bdeb00b67b3d:0xb1f0f5a5f90de5bc",
+  "lat": 34.1462162,
+  "lon": -118.4129368,
+  "name": "The Shops at Sportsmen's Lodge"
+ },
+ {
+  "id": "072B21690742C48CCADE",
+  "mid": "/g/11syrmjjsq",
+  "fid": "0x80c2c7dcc84be623:0x80ec9878fb02a011",
+  "lat": 34.05308,
+  "lon": -118.2924596,
+  "name": "Somemore LA"
+ },
+ {
+  "id": "0589FBCFB542C48F3427",
+  "mid": "/g/11rzq84mv3",
+  "fid": "0x80c2c78be5d8e73f:0x838fb6765b2d2789",
+  "lat": 33.9323988,
+  "lon": -117.9317555,
+  "name": "Dreamland Anime Cafe"
+ },
+ {
+  "id": "06CBCA59BF42C49955B1",
+  "mid": "/g/11s_tkbjhs",
+  "fid": "0x80c2db56dc29c713:0x57e7247ec3fa6a11",
+  "lat": 34.067439,
+  "lon": -118.1341232,
+  "name": "Asayoru Maid Cafe"
+ },
+ {
+  "id": "0AF7ED486642C49B3BAA",
+  "mid": "/g/11gdkwhqvy",
+  "fid": "0x80c2bb77059ece71:0xee859880a804670c",
+  "lat": 33.9799195,
+  "lon": -118.4650245,
+  "name": "CatCafe Lounge"
+ },
+ {
+  "id": "03AF432FD942C49EDED2",
+  "mid": "/g/11mcv3041y",
+  "fid": "0x80c2d7a47c0b0963:0xdb1a8ab70be02825",
+  "lat": 34.0791579,
+  "lon": -117.9518664,
+  "name": "Anteiku Cafe"
+ },
+ {
+  "id": "0E61E85BA242C4F60E14",
+  "mid": "/g/11vhcrk7dk",
+  "fid": "0x80c2b99b2aa0c32d:0xde786ddb77bfdb",
+  "lat": 34.0681732,
+  "lon": -118.3741788,
+  "name": "Hanok K-Beauty"
+ },
+ {
+  "id": "07D6228D9442C4FC9314",
+  "mid": "/g/1tp_6nv2",
+  "fid": "0x80c2c68918ab6583:0x789e80bb1ab01384",
+  "lat": 34.0773942,
+  "lon": -118.2208159,
+  "name": "Society of St. Vincent de Paul Thrift Store"
+ },
+ {
+  "id": "0B29AC4F4842C4FD99D6",
+  "mid": "/g/11c549k614",
+  "fid": "0x80c2bb9bf82c295f:0xebd772bf30484e13",
+  "lat": 34.0465576,
+  "lon": -118.4337951,
+  "name": "TROVE"
+ },
+ {
+  "id": "05F1EC5D2642C50481B6",
+  "mid": "/g/1thzp4y2",
+  "fid": "0x80c2c71a1902775f:0xb1021a867cae2a68",
+  "lat": 34.078344,
+  "lon": -118.262842,
+  "name": "Lemon Frog Shop Vintage"
+ },
+ {
+  "id": "04EFC04E0C42C505FA0A",
+  "mid": "/g/1td0gsb1",
+  "fid": "0x80c2beccfa5466f5:0x5f3fd735a7af1c9e",
+  "lat": 34.0833982,
+  "lon": -118.3594799,
+  "name": "Melrose Trading Post"
+ },
+ {
+  "id": "0067623B2F42C52F3C7C",
+  "mid": "/g/1thhksf9",
+  "fid": "0x80c2c0aeee8375bb:0x5a006dc5be94d0c7",
+  "lat": 34.10369379999999,
+  "lon": -118.2916222,
+  "name": "Squaresville"
+ },
+ {
+  "id": "0D0136946742C53041D9",
+  "mid": "/g/11vbwc7c2j",
+  "fid": "0x80dd4baf24ef9bf3:0xeeb95f2baea405fb",
+  "lat": 33.8330001,
+  "lon": -118.3505325,
+  "name": "Animate LA"
+ },
+ {
+  "id": "0AEFAA079D42C53D029E",
+  "mid": "/g/11rr6yqnm9",
+  "fid": "0x80c2b95d26ef9d5f:0xccd584a1af7638f9",
+  "lat": 34.0787779,
+  "lon": -118.3618587,
+  "name": "Canter's Deli"
+ }
+]

@@ -1,0 +1,648 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style><title>Best Day Ever!</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: sticky top bar with four steps. Start = welcome + one card per kind of day. Rank = best-worst screens. Priorities = scored list. Schedule = grid plus list. A slide-over panel holds Learn more for any place. */
+:root{
+  --bg:#f6efe2; --surface:#fffaf0; --fg:#23211d; --muted:#6b6459; --line:#e3d9c6;
+  --accent:#0f6f73; --accent-ink:#ffffff; --pop:#e8603c; --sun:#e9b23a;
+  --shadow:0 10px 30px rgba(35,33,29,.10);
+  --display:"Bricolage Grotesque","Avenir Next",Avenir,"Helvetica Neue",Arial,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#1c1a17; --surface:#262320; --fg:#f3ede2; --muted:#b3a996; --line:#3b362f;
+  --accent:#4fb8bb; --accent-ink:#10201f; --pop:#ff8a62; --sun:#f0c15a;
+  --shadow:0 10px 30px rgba(0,0,0,.45); color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#1c1a17; --surface:#262320; --fg:#f3ede2; --muted:#b3a996; --line:#3b362f;
+  --accent:#4fb8bb; --accent-ink:#10201f; --pop:#ff8a62; --sun:#f0c15a;
+  --shadow:0 10px 30px rgba(0,0,0,.45); color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+a{color:var(--accent)}
+.wrap{max-width:1120px;margin:0 auto}
+.note{font-size:15px;color:var(--muted);margin:6px 0 0}
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:11px 20px;font-weight:700;font-size:15px}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn.small{font-size:13px;padding:8px 14px;margin-left:auto}
+.btn:disabled{opacity:.45;cursor:default}
+.chip{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:12px}
+.brand{font-family:var(--display);font-weight:800;font-size:clamp(22px,3vw,30px);letter-spacing:-.01em}
+.brand em{font-style:normal;color:var(--pop)}
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.steps button{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:8px 14px;font-weight:600;font-size:14px}
+.steps button[aria-current="page"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+/* start */
+.hero{padding-block:30px 10px;max-width:60ch}
+.hero h1{font-size:clamp(30px,5vw,48px);font-weight:800;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:var(--pop)}
+.hero h1 em.la{color:var(--accent)}
+.hero h1 .line{display:block}
+.hero h1{text-wrap:initial}
+.hero p{font-size:18px;line-height:1.5;margin:14px 0 0}
+.hero p + p{margin-top:8px}
+.kinds{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:22px}
+.kind{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.kind img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--line)}
+.kind .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px}
+.kind h3{font-size:21px;font-weight:700}
+.kind p{margin:0;font-size:15px}
+.places{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.places button{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:6px 12px;font-size:13px;min-height:32px;font-weight:600}
+.places button:hover,.places a.gal:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.places a.gal{display:inline-flex;align-items:center;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:6px 12px;font-size:13px;min-height:32px;text-decoration:none;font-weight:600}
+.galbtn{display:inline-block;margin-top:10px;text-decoration:none}
+.nextstep{margin-top:28px}
+
+/* rank */
+.rank{padding-block:26px}
+.rank h2,.scores h2,.results h2{font-size:clamp(22px,3vw,30px);font-weight:800}
+.progress{height:6px;background:var(--line);border-radius:999px;overflow:hidden;margin:14px 0 8px}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .25s}
+.count{margin:0 0 10px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tapmsg{margin:10px 0 0;font-size:15px;color:var(--pop);font-weight:600}
+.md{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.md .hdr,.md .row{display:grid;grid-template-columns:96px 1fr 96px;align-items:center}
+.md .hdr{background:var(--bg);font-size:11px;line-height:1.2;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:center;padding:10px 4px}
+.md .hdr span:nth-child(2){text-align:left;padding-left:14px}
+.md .row{border-top:1px solid var(--line)}
+.md .row label{display:flex;justify-content:center;align-items:center;height:64px;cursor:pointer}
+.md .row input{width:22px;height:22px;accent-color:var(--accent)}
+.md .row .worst input{accent-color:var(--pop)}
+.md .row .name{font-family:var(--display);font-weight:700;font-size:18px;padding:0 14px;min-width:0}
+.md .row .name small{display:block;font-family:var(--body);font-weight:400;font-size:13px;color:var(--muted)}
+.empty{color:var(--muted)}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+.pairwrap{display:flex;flex-direction:column;gap:8px;min-width:0}
+.pairwrap > button{flex:1}
+a.gal{display:inline-flex;align-items:center;align-self:flex-start;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:6px 12px;font-size:13px;min-height:32px;text-decoration:none;font-weight:600}
+.md .row .name a.gal{margin-left:8px;min-height:26px;padding:3px 10px;font-size:12px}
+.pair button{text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:0;overflow:hidden;color:var(--fg);display:flex;flex-direction:column;min-width:0}
+.pair button img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
+.pair button span{padding:12px 14px 14px;display:block}
+.pair button b{display:block;font-family:var(--display);font-size:19px;font-weight:700}
+.pair button small{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+.pair button[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface))}
+.slist .sub{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.slist .sub > div{display:grid;grid-template-columns:auto 1fr 120px auto;gap:10px;align-items:center;font-size:14px;padding:4px 6px;border-radius:8px}
+.slist li.over{outline:2px dashed var(--accent)}
+.slist .vrow.over{outline:2px dashed var(--accent)}
+.slist .dragging{opacity:.5}
+.slist .grip{color:var(--muted);font-size:18px;letter-spacing:-3px;user-select:none;touch-action:none;cursor:grab;padding:4px 6px;border-radius:6px}
+.slist .grip:hover{background:var(--line)}
+.slist .cathead{display:flex;align-items:center;gap:10px;cursor:grab;user-select:none}
+.slist .vrow{cursor:grab;user-select:none}
+.slist .cathead b{flex:1;min-width:0}
+.slist .ud{display:inline-flex;gap:4px}
+.slist .ud button{font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px;border:1px solid var(--accent);background:transparent;color:var(--accent);min-height:32px}
+.slist .ud button:disabled{opacity:.3}
+.slist .sub .bar{height:6px}
+@media (max-width:480px){.md .hdr,.md .row{grid-template-columns:72px 1fr 72px}.md .row .name{font-size:16px}.slist .sub > div{grid-template-columns:auto 1fr auto}.slist .sub .bar{display:none}}
+
+/* priorities */
+.scores{padding-block:26px}
+.slist{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.slist li{display:grid;grid-template-columns:44px 1fr;gap:6px 12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;min-width:0}
+.slist li::before{counter-increment:s;content:counter(s);font-family:var(--display);font-weight:800;font-size:24px;color:var(--pop);text-align:center;grid-row:span 3}
+.slist b{font-size:17px}
+.slist .bar{height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+.slist .bar i{display:block;height:100%;background:var(--accent)}
+.slist small{color:var(--muted);font-size:13px}
+
+/* schedule */
+.results{padding-block:26px}
+.status{margin:10px 0 0;font-size:15px;font-weight:600;color:var(--pop)}
+.schedwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px;margin-top:18px;align-items:start}
+@media (max-width:900px){.schedwrap{grid-template-columns:1fr}}
+@media (min-width:901px){.schedwrap .grid8{grid-column:2;grid-row:1}.schedwrap .lists{grid-column:1;grid-row:1}}
+.grid8{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;position:sticky;top:calc(72px + env(safe-area-inset-top,0px))}
+@media (max-width:900px){.grid8{position:static}}
+.grid8 h4{font-family:var(--display);font-size:14px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:center;margin:0}
+.cell{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-height:86px;padding:8px 10px;font-size:14px;min-width:0}
+.cell .bl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.cell.some{border-color:var(--sun)}
+.cell.full{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface))}
+.cell .item{margin-top:4px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.cell .item .lk{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-left:6px}
+.cell .leave{color:var(--muted);font-style:italic;margin-top:4px}
+.lists h3{font-size:16px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.lists h3:first-child{margin-top:0}
+.rlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rlist li{display:grid;grid-template-columns:1fr;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:0}
+.rlist li.placed{border-color:var(--accent)}
+.rlist b{display:block;font-size:16px}
+.rlist small{color:var(--muted);display:block}
+.rlist .ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-width:0}
+.rlist select{font:inherit;font-size:14px;padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);max-width:100%}
+.rlist label.full{font-size:14px;display:flex;gap:6px;align-items:center}
+.rlist .st{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.rlist .st.out{color:var(--pop)}
+.rlist .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.rlist .seg button{font-size:13px;font-weight:600;padding:7px 12px;min-height:36px;border:0;background:transparent;color:var(--muted);border-right:1px solid var(--line)}
+.rlist .seg button:last-child{border-right:0}
+.rlist .seg button[aria-pressed="true"]{color:var(--accent-ink);background:var(--accent)}
+.rlist .seg button.m-out[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.rlist li.in{border-color:var(--accent)}
+.rlist li.out{opacity:.75}
+.rlist li.emptyrow{border-style:dashed}
+.rlist .when{display:inline-block;margin-left:8px;font-family:var(--body);font-weight:600;font-size:13px;color:var(--accent)}
+.rlist .more{background:transparent;border:0;color:var(--accent);font-size:13px;padding:6px 0;text-decoration:underline}
+.saverow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+.saverow input{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);min-width:0;width:min(280px,100%)}
+.saved{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:16px}
+.saved h3{grid-column:1/-1;font-size:18px;font-weight:700}
+.sv{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.sv .svh b{display:block;font-size:17px}
+.sv .svh small{color:var(--muted)}
+.sv pre{font:13px/1.45 var(--body);white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0 0;color:var(--fg)}
+.sv .actions{margin-top:12px;justify-content:space-between}
+.sv .btn{padding:8px 14px;font-size:14px}
+
+/* panel */
+.scrim{position:fixed;inset:0;background:rgba(20,18,15,.45);z-index:20}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(560px,100vw);background:var(--surface);z-index:21;overflow-y:auto;box-shadow:var(--shadow);
+  padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.panel img{display:block;width:100%;height:170px;object-fit:cover}
+.panel .inner{padding:18px max(18px,env(safe-area-inset-right,0px)) 28px 18px;display:flex;flex-direction:column;gap:16px}
+.panel h2{font-size:28px;font-weight:800;letter-spacing:-.01em}
+.close{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));right:calc(10px + env(safe-area-inset-right,0px));width:44px;height:44px;border-radius:999px;border:0;background:var(--surface);color:var(--fg);font-size:22px;line-height:1;box-shadow:var(--shadow)}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px;margin:0}
+.meta dt{color:var(--muted);font-weight:600}
+.meta dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.summary{background:var(--bg);border-radius:12px;padding:14px 16px;font-size:16px;min-height:72px;white-space:pre-wrap}
+.summary.wait{color:var(--muted)}
+.facts{margin:0;padding-left:20px;font-size:15px}
+.facts li{margin:4px 0}
+.ask h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.chat{display:flex;flex-direction:column;gap:10px}
+.msg{padding:10px 14px;border-radius:12px;max-width:92%;white-space:pre-wrap;font-size:15px}
+.msg.u{align-self:flex-end;background:var(--accent);color:var(--accent-ink)}
+.msg.a{align-self:flex-start;background:var(--bg)}
+.msg.wait{color:var(--muted)}
+.askrow{display:flex;gap:8px;margin-top:10px}
+.askrow input{flex:1;min-width:0;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg)}
+.askrow button{background:var(--pop);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:600}
+.askrow button:disabled{opacity:.5;cursor:default}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Best Day <em>Ever!</em></div>
+    <nav class="steps" aria-label="Steps">
+      <button data-view="start" aria-current="page">1 · Start</button>
+      <button data-view="rank">2 · Rank</button>
+      <button data-view="scores">3 · Priorities</button>
+      <button data-view="results">4 · Schedule</button>
+    </nav>
+  </header>
+
+  <section id="v-start">
+    <div class="hero">
+      <h1>For your 16th birthday, we want to give you the <span class="line"><em>BEST DAY EVER!</em></span> <span class="line"><em class="la">IN LOS ANGELES!</em></span></h1>
+      <p>Take a look at all the options. No rush. No decisions to make (yet.)</p>
+      <p>Once you have a feel for what’s in store, move on to Step 2</p>
+    </div>
+    <div class="actions"><button class="btn" id="toRankTop">Step 2 · Rank</button></div>
+    <div class="kinds" id="kinds"></div>
+    <div class="actions nextstep"><button class="btn" id="toRank">Step 2 · Rank</button></div>
+  </section>
+
+  <section id="v-rank" class="rank" hidden>
+    <h2 id="mdTitle">Which is the best of the best? Which is the least best?</h2>
+    <div class="progress"><i id="pbar"></i></div>
+    <p class="count" id="mdCount"></p>
+    <div id="mdbox"></div>
+    <p class="tapmsg" id="mdMsg" hidden></p>
+    <div class="actions">
+      <button class="btn ghost" id="mdBack">Back</button>
+      <button class="btn" id="mdNext" disabled>Next</button>
+      <button class="btn ghost small" id="mdReset">Restart ranking</button>
+    </div>
+  </section>
+
+  <section id="v-scores" class="scores" hidden>
+    <h2>Your priorities</h2>
+    <p class="note">Drag to reorder, or use Up and Down.</p>
+    <ol class="slist" id="slist"></ol>
+    <div class="actions"><button class="btn ghost small" id="orderReset" hidden>Back to my answers</button></div>
+    <div class="actions nextstep"><button class="btn" id="toResults">Build the schedule</button></div>
+  </section>
+
+  <section id="v-results" class="results" hidden>
+    <h2>Fit it into the weekend</h2>
+    <div class="actions"><button class="btn" id="shuffle">Shuffle the unlocked</button><span class="status" id="schedStatus"></span></div>
+    <div class="schedwrap">
+      <div class="grid8" id="grid8"></div>
+      <div class="lists" id="lists"></div>
+    </div>
+    <form class="saverow" id="saveForm"><input type="text" id="saveName" placeholder="Name this version" autocomplete="off" maxlength="40"><button class="btn ghost" type="submit">Save this version</button><span class="note" id="saveNote"></span></form>
+    <div id="savedbox" class="saved"></div>
+  </section>
+</div>
+
+<div id="scrim" class="scrim" hidden></div>
+<aside id="panel" class="panel" hidden aria-label="Learn more"></aside>
+
+<script>
+const DATA = {"categories": [{"id": "hair", "label": "Hair cut or color", "exclusive": true, "blurb": "A cut or a color. Four hours on Monday with a stylist who does bold work.", "img": "images/cat-hair.png"}, {"id": "thrift", "label": "Thrift and vintage stores", "blurb": "Rack digging in stores that are open any day. Cheap finds, weird finds, a shop cat or two.", "img": "images/cat-thrift.png"}, {"id": "market", "label": "Markets that only happen that day", "blurb": "Pop-up markets that exist for one day. Vintage vendors, makers, food, live music.", "img": "images/cat-market.png"}, {"id": "anime", "label": "Anime or maid cafe", "blurb": "Themed drinks and desserts, live shows, photos with the cast.", "img": "images/cat-anime.png"}, {"id": "books", "label": "Books and anime shops", "blurb": "Walls of manga, used-book stacks with cats, and the first US store of Japan's biggest anime chain.", "img": "images/cat-books.png"}, {"id": "show", "label": "See a show", "blurb": "Live theater. The improv house that fed Saturday Night Live, a Broadway tour, a regional premiere.", "img": "images/cat-show.png"}, {"id": "eat", "label": "Eat somewhere fun", "blurb": "Drag brunch, a 1931 deli inside an old movie theater, teddy bear desserts.", "img": "images/cat-eat.png"}, {"id": "kbeauty", "label": "K-beauty facial", "blurb": "A Korean glass-skin facial with a tea ceremony.", "img": "images/cat-kbeauty.png"}, {"id": "park", "label": "Rollercoasters!", "blurb": "Magic Mountain. Twenty coasters, the most on earth. Sunday only, full or half day.", "img": "images/cat-park.png"}], "venues": [{"id": "v01", "name": "Sunday's Best Vintage", "cat": "thrift", "typeLabel": "vintage/thrift", "neighborhood": "Echo Park", "address": "1557 Sunset Blvd, Los Angeles, CA 90026", "what": "A small vintage and thrift clothing store on Sunset Blvd in Echo Park, named after the resident shop cat, Sunday.", "hook": "Color-coded thrift racks, a $1 rack out front, and a shop cat named Sunday.", "facts": ["The store is named after its resident cat, Sunday, who oversees the shop from her own cubby.", "Clothing is color-coded and organized by size, with a men's side and a women's side.", "A local thrift guide notes items under $10 throughout the store and a $1 rack out front.", "Thrift guides list it among the best thrift stores in the Silver Lake / Echo Park / Atwater area."], "price": "Budget thrift; many items under $10, $1 rack out front (per a local thrift guide)", "hours": "Third-party listings show 11:30 AM to 7 PM daily; not confirmed from the store itself", "age": "No age restrictions found; retail store", "booking": "Walk in", "website": null, "img": "images/01.jpg", "lat": 34.0767067, "lon": -118.2568355, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm"], "slots": 1, "when": "Open daily from 11:30am", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon", "gallery": null}, {"id": "v03", "name": "Kinokuniya Bookstore - Los Angeles", "cat": "books", "typeLabel": "bookstore", "neighborhood": "Little Tokyo", "address": "101 San Pedro St, Los Angeles, CA 90012 (ground floor, Kajima Building)", "what": "The Los Angeles flagship of Japan's Kinokuniya bookstore chain, selling Japanese and English books, manga, magazines, stationery and goods. It closed its longtime Weller Court space in July 2025 and reopened in 2026 at a new, larger Little Tokyo location.", "hook": "Japan's big bookstore chain. A new 14,000 square foot flagship packed with manga.", "facts": ["The store moved out of Weller Court (its home since 1980) on July 21, 2025, and reopened in 2026 on the ground floor of the Kajima Building at 101 San Pedro St.", "The new flagship is about 14,000 square feet, more than double the size of the old Weller Court store.", "The store sells books, magazines, stationery and general goods, and Kinokuniya is known for its large manga selection in both English and Japanese.", "Kinokuniya first opened in Los Angeles in 1977 inside the New Otani Hotel in Little Tokyo.", "A second downtown store at THE BLOC (700 W 7th St, G210) started as a 2025 pop-up and is becoming a permanent location."], "price": "Free to browse", "hours": "April 2026 press release lists 10 AM-8 PM for the new store; confirm before visiting", "age": "All ages", "booking": "Walk in", "website": null, "img": "images/03.jpg", "lat": 34.0502444, "lon": -118.2412914, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm"], "slots": 1, "when": "Open 10am to 8pm", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon", "gallery": null}, {"id": "v04", "name": "The Groundlings Theatre & School", "cat": "show", "typeLabel": "theater", "neighborhood": "Melrose / Fairfax", "address": "7307 Melrose Ave, Los Angeles, CA 90046", "what": "A legendary improv and sketch comedy theater and school, considered the West Coast counterpart to Chicago's Second City. Many Saturday Night Live cast members trained here.", "hook": "The improv theater that trained a long line of Saturday Night Live cast members.", "facts": ["Weekly improv: Thursdays 8pm Cookin' with GAS (all improv, running since 1992), Fridays and Saturdays 7:30pm main-stage sketch and improv, 9:30pm The Completely Different Late Show. Confirm on the live calendar.", "The Groundlings was founded in 1974 by Gary Austin, and the company bought the Melrose Ave building in 1975; the theater opened to audiences in April 1979.", "Alumni include Phil Hartman, Paul Reubens (Pee-wee Herman), Laraine Newman and the creators of 'Bridesmaids' and 'Romy and Michele's High School Reunion'.", "Since Laraine Newman was cast in 1975, Groundlings alumni have had a major influence on Saturday Night Live.", "Shows are a mix of sketch comedy and improv; the Thursday all-improv show has run for over 20 years with the Main Company, Alumni and Sunday Company.", "The Sunday Company, formed in 1982, is where performers coming up through the school develop before the Main Company.", "Past ticket prices have ranged from about $16 to $28 depending on the show; there is no late seating and no refunds or exchanges."], "price": "Past listings show roughly $16-$28 per ticket depending on the show (2015-2023 data)", "hours": null, "age": "No venue-wide age policy found; one third-party listing for 'The Completely Different Late Show' at this venue says ages 16 and up", "booking": "Tickets at groundlings.com, the box office, or by phone at (323) 934-4747", "website": "https://groundlings.com/", "img": "images/04.jpg", "lat": 34.0838052, "lon": -118.3490356, "blocks": ["sat-night"], "slots": 2, "when": "Saturday 9:30pm show", "spanOption": false, "whenText": "Sat night", "gallery": null}, {"id": "v05", "name": "The Iliad Bookshop", "cat": "books", "typeLabel": "bookstore", "neighborhood": "North Hollywood", "address": "5400 Cahuenga Blvd, North Hollywood, CA 91601", "what": "One of the largest used bookstores in the Los Angeles area, specializing in literature and the arts, with resident shop cats.", "hook": "100,000 used books in crooked stacks, plus two resident cats, Apollo and Zeus.", "facts": ["The shop stocks more than 100,000 used books, with a focus on literature and the arts.", "Two resident cats, Apollo and Zeus, live in the store.", "It is named after Homer's epic and moved to its current Cahuenga Blvd location in 2006 (it used to sit next to Odyssey Video).", "In November 2022 a fire at the entrance damaged the exterior; neighbors and patrons rallied with support and a GoFundMe, and the owner ran a trial reopening the next day."], "price": "Used-book bargains; free to browse", "hours": "Most directory listings show Tue-Sat 11 AM-7 PM, closed Sun-Mon; not confirmed from the store", "age": "All ages", "booking": "Walk in; phone (818) 509-2665", "website": null, "img": "images/05.jpg", "lat": 34.168883, "lon": -118.3612203, "blocks": ["sat-am", "sat-pm"], "slots": 1, "when": "Closed Sunday and Monday", "spanOption": false, "whenText": "Sat morning, Sat afternoon", "gallery": null}, {"id": "v06", "name": "Hamburger Mary's WeHo", "cat": "eat", "typeLabel": "restaurant", "neighborhood": "West Hollywood", "address": "8288 Santa Monica Blvd, West Hollywood, CA 90046", "what": "A campy burger restaurant and bar famous for its weekend drag brunches and drag shows. The West Hollywood location is the oldest Hamburger Mary's still operating.", "hook": "Burgers with a live drag show at the oldest Hamburger Mary's still running.", "facts": ["Drag brunch runs every Saturday and Sunday with multiple seatings, burgers and a live drag show.", "The West Hollywood location is described as the oldest Hamburger Mary's still operating.", "Signature menu items associated with the chain include 'Mary's Hot Legs' and 'Love Me Tenders'.", "Reviewers describe the brunch crowd as packed with all types of people and ages.", "Bottomless mimosa options are offered for adults at brunch."], "price": null, "hours": "Third-party listing shows open 11 AM daily until around midnight; confirm with the restaurant", "age": "No official age policy found. User-generated answers (Tripadvisor, Yelp) say the drag brunch is all ages and kids and teens attend with parents, though some humor is adult-oriented; some Yelp answers say evening drag shows may be 18+. Call (323) 654-3800 to confirm before bringing a minor.", "booking": "Reservations recommended for drag brunch; bookable via OpenTable, Resy or Ticketmaster (Saturday Drag Brunch tickets)", "website": null, "img": "images/06.jpg", "lat": 34.0905374, "lon": -118.3701139, "blocks": ["sat-am", "sun-am"], "slots": 2, "when": "Drag brunch, weekend mornings", "spanOption": false, "whenText": "Sat morning, Sun morning", "gallery": null}, {"id": "v07", "name": "Pickwick Vintage Show", "cat": "market", "typeLabel": "vintage market", "neighborhood": "Downtown LA", "address": "ROW DTLA, 777 S Alameda St, Los Angeles, CA 90021", "what": "A recurring (roughly monthly) curated vintage market held at ROW DTLA, with dozens of local vintage vendors selling clothing, jewelry, accessories and textiles.", "hook": "40 to 50 curated vintage vendors under one roof, one Saturday a month.", "facts": ["The show brings together 40 to 50+ local vintage vendors selling clothing, jewelry, accessories and textiles.", "Shows typically run 10 AM to 4 PM on a Saturday; a 2026 listing had a July 11 show and an August 8 'final summer show'.", "Past events used tiered entry: early-bird tickets (around $20) at 10 AM and general admission (around $10) at noon.", "Advance tickets are recommended because time slots can sell out, with limited tickets at the door.", "Pickwick also runs a sister show at the Ferry Building in San Francisco."], "price": "Past listings: tickets from $10 general / about $20 early bird; one Aug 2026 listing said free, so check the current event page", "hours": "Event days only, typically Saturday 10 AM-4 PM; no upcoming date confirmed as of Oct 31, 2026", "age": "No age restrictions found", "booking": "Buy tickets in advance via the organizer (Instagram @pickwickvintage) or ROW DTLA event listings", "website": null, "img": "images/07.jpg", "lat": 34.0341982, "lon": -118.2408182, "blocks": ["sat-am", "sat-pm"], "slots": 1, "when": "Saturday market", "spanOption": false, "whenText": "Sat morning, Sat afternoon", "gallery": null}, {"id": "v08", "name": "The Flamingo Lounge", "cat": "hair", "typeLabel": "hair salon", "neighborhood": "Highland Park", "address": "5935 York Blvd, Los Angeles, CA 90042", "what": "An alternative hair salon in Highland Park with retro, Y2K-inspired decor, offering haircuts, vivid color, flash tattoos and tooth gems. It is a salon, not a bar or lounge.", "hook": "A Y2K-decor salon doing rainbow color, flash tattoos and tooth gems.", "facts": ["It is a hair salon with retro, Y2K-inspired decor, not a bar.", "Services include haircuts, blonding, rainbow color, extensions, blowouts, brow and lash treatments, flash tattoos ('malltats') and tooth gems.", "Haircuts start at $25 and flash tattoos start at $50, per the salon's booking page.", "Founder Jessica Ruby Spratt is a bi-coastal stylist and educator with over 15 years of experience.", "The salon is LGBTQ+ friendly and has on-site parking."], "price": "Haircuts from $25; flash tattoos from $50", "hours": "Salon's page says closed Mondays; listed hours vary by source, confirm before going", "age": "No age policy found for haircuts; tattoos and tooth gems may have their own age requirements, ask the salon", "booking": "Book online via the salon's GlossGenius page; phone (213) 222-6918", "website": "https://flamingoloungehair.glossgenius.com/", "img": "images/08.jpg", "lat": 34.1184655, "lon": -118.1894715, "blocks": ["mon-am", "mon-pm"], "slots": 2, "when": "Hair is Monday, 4 hours", "spanOption": false, "whenText": "Mon morning, Mon afternoon", "gallery": "https://www.instagram.com/flamingoloungehair?exln=bzc2MnJybWdseWdr"}, {"id": "v09", "name": "Little Shop of Hairdos", "cat": "hair", "typeLabel": "hair salon", "neighborhood": "Downtown Upland", "address": "172 N 2nd Ave, Upland, CA 91786", "what": "A well-reviewed neighborhood hair salon in downtown Upland known for vivid color work and a fun vibe.", "hook": "Vivid color and creative hair art in a salon reviewers call a great vibe.", "facts": ["Reviewers praise the salon for vivid colors, color corrections and creative 'hair art'.", "Reviewers describe a great vibe and say stylists are good with kids and teens.", "The salon is by appointment only."], "price": "$$ on Yelp; reviewers call prices very reasonable", "hours": "Yelp listing shows 10 AM-7 PM; hours vary by source, confirm before going", "age": null, "booking": "By appointment only", "website": null, "img": "images/09.jpg", "lat": 34.0957097, "lon": -117.6482721, "blocks": ["mon-am", "mon-pm"], "slots": 2, "when": "Hair is Monday, 4 hours", "spanOption": false, "whenText": "Mon morning, Mon afternoon", "gallery": "https://www.instagram.com/littleshopofhairdos?xtok=MW44bmU5bXppdndiZQ=="}, {"id": "v10", "name": "Ahmanson Theatre", "cat": "show", "typeLabel": "theater", "neighborhood": "Downtown LA", "address": "135 N. Grand Ave., Los Angeles, CA 90012", "what": "The Music Center's big Broadway-style house, run by Center Theatre Group. The Music Man plays Oct 27 to Nov 8, 2026, then Oh, Mary! Nov 10 to Dec 6 and Christmas Carol Goes Wrong Dec 12 to Jan 10.", "hook": "LA's big Broadway house. The Music Man plays through Sunday Nov 8.", "facts": ["The Music Man national tour plays the Ahmanson through Sunday Nov 8, 2026, its first big LA run since 1980. Your weekend catches its last two days. Resale from about $38.", "Opened in 1967 as part of the Music Center complex, designed by Welton Becket & Associates, and redesigned in the mid-1990s by Ellerbe Becket to bring the balcony and mezzanine closer to the stage.", "Named for the Ahmanson family of philanthropists (Howard F. Ahmanson Sr. and Caroline Leonetti Ahmanson).", "December 2026: 'Oh, Mary!', the Tony-winning Broadway comedy about Mary Todd Lincoln, plays Nov 10 - Dec 6, 2026 as the 2026/27 season opener.", "Dec 12, 2026 - Jan 10, 2027: 'Christmas Carol Goes Wrong', the North American premiere of the new comedy from Mischief (the company behind 'The Play That Goes Wrong'), written by Henry Lewis, Jonathan Sayer and Henry Shields and directed by Matt DiCarlo.", "Later in the 2026/27 season: 'Fiddler on the Roof' in Yiddish (Feb 13 - Mar 14, 2027), 'Riverdance 30' (Apr 13-18, 2027) and 'BOOP! The Musical' (Jul 6 - Aug 1, 2027).", "The 2026/27 season (12 productions across CTG's three venues) was announced March 30, 2026."], "price": "Box office prices not found; resale listings for 'Christmas Carol Goes Wrong' start around $68-$81 per ticket", "hours": null, "age": null, "booking": "Single tickets and subscriptions sold through Center Theatre Group (centertheatregroup.org); 'Christmas Carol Goes Wrong' single tickets went on sale in August 2026", "website": "https://www.centertheatregroup.org/shows-tickets/subscriptions/ahmanson-theatre/", "img": "images/10.jpg", "lat": 34.0579743, "lon": -118.2475585, "blocks": ["sat-pm", "sat-night", "sun-pm", "sun-night"], "slots": 2, "when": "The Music Man closes Sunday Nov 8", "spanOption": false, "whenText": "Sat afternoon, Sat night, Sun afternoon, Sun night", "gallery": null}, {"id": "v13", "name": "Sunshine Makers Market", "cat": "market", "typeLabel": "shopping center", "neighborhood": "Studio City", "address": "12833 Ventura Blvd., Studio City, CA 91604", "what": "A free outdoor makers market that sets up in the courtyard of The Shops at Sportsmen's Lodge in Studio City on select Saturdays. Local makers sell handmade goods, art, jewelry and clothing, with the center's cafes and shops open around it.", "hook": "A free Sunday makers market in an open-air courtyard, with Erewhon next door.", "facts": ["Free entry. Past markets ran 10am to 4pm on a Saturday in the center's open-air courtyard.", "Dozens of local makers sell handmade jewelry, clothing, art, ceramics, candles and food.", "Same organizer runs markets at the Helms Design District in Culver City, including a dog-adoption mini market with Pup Culture Rescue.", "Anchored by an 11,000-square-foot Erewhon Market (the pricey LA health-food grocery famous for smoothies), which was the first tenant to open, plus an Equinox gym.", "Erewhon's cafe here has floating patio decks over the courtyard.", "Food options reported at the center include Sugarfish (sushi), Roberta's Pizza, HiHo Cheeseburger, Tocaya, Civil Coffee, Van Leeuwen ice cream and Tuesday's Sweet Shoppe."], "price": "Free entry to the market. Goods and food cost what the makers charge.", "hours": "Market days are select Saturdays, 10am to 4pm. The 2026 date for this market was not posted online as of Oct 31, 2026. Confirm on sunshinemakersmarket.com.", "age": null, "booking": "Walk in. No ticket.", "website": "https://www.sunshinemakersmarket.com/", "img": "images/13.jpg", "lat": 34.1462162, "lon": -118.4129368, "blocks": ["sun-am", "sun-pm"], "slots": 1, "when": "Sunday market, 10am to 4pm", "spanOption": false, "whenText": "Sun morning, Sun afternoon", "gallery": null}, {"id": "v14", "name": "Somemore LA", "cat": "eat", "typeLabel": "dessert cafe", "neighborhood": "Koreatown", "address": "2717 W. Olympic Blvd., Unit 106, Los Angeles, CA 90006", "what": "A teddy bear-themed dessert and drink cafe in Koreatown known for photogenic drinks and bear-shaped treats. It is a dessert cafe, not a s'mores shop, though it sells s'mores-style cookies.", "hook": "Teddy-bear cups, bear ice cubes and mille crepe cake. Built to be photographed.", "facts": ["Drinks come in cups with teddy bear ears, heart straws and bear ice cubes, which is why it goes viral on social media.", "Menu includes mille crepe cakes, bear-shaped brownies, cookies (including s'mores cookies in several flavors), macarons, matcha lattes, strawberry lattes and hot chocolate.", "The bear-themed hot chocolate with a bear marshmallow is described as a crowd favorite on cooler evenings.", "Reviewers single out the matcha lattes as the standout drink.", "The owner and founder, Jed Jeong, started out as an architect, and the space is designed accordingly.", "Follow @somemore_la on Instagram; phone (213) 529-4499."], "price": null, "hours": "Listed as 12:00pm - 10:00pm, closed Tuesdays (third-party listings; one listing shows daily)", "age": "All ages", "booking": "Walk-in cafe", "website": "https://somemore.store/", "img": "images/14.jpg", "lat": 34.05308, "lon": -118.2924596, "blocks": ["sat-pm", "sun-pm", "mon-pm", "sat-night", "sun-night"], "slots": 1, "when": "Opens at noon", "spanOption": false, "whenText": "Sat afternoon, Sun afternoon, Mon afternoon, Sat night, Sun night", "gallery": null}, {"id": "v15", "name": "Dreamland Anime Cafe", "cat": "anime", "typeLabel": "anime cafe", "neighborhood": "La Habra", "address": "1281 E. La Habra Blvd., Unit 6, La Habra, CA 90631", "what": "The first permanent storefront of Dreamland Maid Cafe, an LA-born maid cafe that spent years doing pop-ups at anime conventions. It serves bubble tea and desserts with live idol shows and photos with the cast.", "hook": "America's largest indie maid cafe, with live idol shows and cheki photos.", "facts": ["Opened its first permanent location in La Habra in August 2026, after starting around 2020 as a Little Tokyo pop-up and touring conventions like Anime Expo, Emerald City Comic Con, MEGACON and SakuraCon.", "Offers bubble tea, desserts, live idol shows ('DreamLIVE') and cheki (instant photo) sessions with the maids.", "Bills itself as America's largest indie maid cafe.", "At convention pop-ups, seating tickets have been $10-$15 per seat with food and drinks extra, and tickets included 1-hour seating, table-side entertainment, the idol showcase and a souvenir craft.", "The cafe is cashless (mobile and card payments only).", "Ran a Halloween event Oct 31, 2026 with maids in costume Oct 30 - Nov 1."], "price": "Convention seating tickets were $10-$15 per seat plus food and drink; La Habra storefront prices not confirmed", "hours": "11:30am - 9pm, closed Tuesdays (official site, Oct 2026)", "age": "Convention programming described as all ages; La Habra policy not confirmed", "booking": "Convention events required reservations booked for the whole party; walk-in vs. reservation policy for the La Habra store not confirmed", "website": "https://dreamlandanimecafe.com/", "img": "images/15.jpg", "lat": 33.9323988, "lon": -117.9317555, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm", "sat-night", "sun-night"], "slots": 1, "when": "Open 11:30am to 9pm", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon, Sat night, Sun night", "gallery": null}, {"id": "v16", "name": "Asayoru Maid Cafe", "cat": "anime", "typeLabel": "anime cafe", "neighborhood": "Monterey Park", "address": "500 N. Atlantic Blvd., Ste 125, Monterey Park, CA 91754", "what": "A permanent brick-and-mortar maid cafe in Monterey Park with costumed maids, live performances and Japanese-style comfort food. It calls itself LA's permanent maid cafe.", "hook": "A permanent maid cafe with high-energy shows and Japanese comfort food.", "facts": ["Maids perform high-energy shows and interact with guests at the table, with themed comfort food and creative Japanese-style dishes.", "Reviewers report it gets very busy, and one noted guests are only allowed to place one order from the menu.", "Families visit: one reviewer came with a spouse and two kids, and another celebrated a birthday there.", "Phone: (626) 346-9699."], "price": "$31-$50 per person (OpenTable)", "hours": "Listings conflict: OpenTable shows Thu-Sun 5-9pm; Yelp/Tripadvisor show lunch 11am-3pm plus evenings, closed Mondays (Oct 2026). Confirm before going.", "age": null, "booking": "Reservations appear to go through Instagram or the cafe's own booking page (voicemail says to text on Instagram); OpenTable does not take reservations for it", "website": "https://www.asayorumaidcafe.com/", "img": "images/16.jpg", "lat": 34.067439, "lon": -118.1341232, "blocks": ["sat-pm", "sat-night", "sun-pm", "sun-night"], "slots": 1, "when": "Lunch and dinner seatings", "spanOption": false, "whenText": "Sat afternoon, Sat night, Sun afternoon, Sun night", "gallery": null}, {"id": "v18", "name": "Anteiku Cafe", "cat": "anime", "typeLabel": "anime cafe", "neighborhood": "Baldwin Park", "address": "14911 Pacific Ave., Unit 100, Baldwin Park, CA 91706", "what": "A small anime-inspired coffee shop in Baldwin Park named after the cafe in 'Tokyo Ghoul'. It serves themed matcha lattes, coffee and Japanese snacks in anime-decorated space.", "hook": "A Tokyo Ghoul themed coffee shop with anime drinks and onigiri.", "facts": ["Named after Anteiku, the coffee shop in 'Tokyo Ghoul'; reviewers reference the character Kaneki and the show's vibe.", "Known for anime-themed drinks like 'Nezuko's Love Matcha' (a Demon Slayer-inspired matcha latte) and matcha lattes with banana creme.", "Also serves food like onigiri (two pieces per order), which reviewers praise.", "Featured in a September 2025 SAC Media story as bringing anime and coffee culture to Baldwin Park.", "A flag outside the shop catches people's eye while driving by.", "Phone: (626) 257-3164."], "price": null, "hours": "Unclaimed listing shows roughly 8:30am-5pm Mon-Thu and Sun, extended to 7pm Fri-Sat; confirm before visiting", "age": null, "booking": "Walk-in coffee shop", "website": "https://anteiku-cafe-107675.square.site/", "img": "images/18.jpg", "lat": 34.0791579, "lon": -117.9518664, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm"], "slots": 1, "when": "Coffee shop hours", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon", "gallery": null}, {"id": "v19", "name": "Hanok K-Beauty", "cat": "kbeauty", "typeLabel": "beauty shop", "neighborhood": "Beverly Grove", "address": "520 S San Vicente Blvd, Los Angeles, CA 90048", "what": "A Korean skincare spa and facial studio that also sells Korean skincare products. It is a treatment-focused spa rather than a walk-in cosmetics store.", "hook": "Korean glass-skin facials with a tea ceremony and a hanbok fitting.", "facts": ["It is a roughly 4,500 sq ft Korean facial spa built around 'glass skin' facials and naturally derived products.", "Services listed include Glass Skin, acne-prone skin, anti-aging, PDRN and couples facials, with skin analysis using high-definition imaging and 3D mapping.", "Visits can include a Korean tea ceremony with teas sourced from Jeju Island and a Hanbok (traditional Korean dress) wardrobe fitting.", "It has three VIP private rooms and two couples rooms.", "Korean skincare products are sold on site.", "There is a private parking lot at 500 S San Vicente Blvd at the top of the block."], "price": "Spa pricing; one listed 90-minute facial is $250", "hours": "Apple Maps listing shows weekday hours 10:00 AM-8:00 PM; weekend hours unclear (confirm on official site)", "age": null, "booking": "Facial treatments are appointment-based; book through the official site or call (213) 782-6690", "website": "https://www.hanokkbeauty.com/", "img": "images/19.jpg", "lat": 34.0681732, "lon": -118.3741788, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm"], "slots": 2, "when": "Facial by appointment", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon", "gallery": null}, {"id": "v20", "name": "Society of St. Vincent de Paul Thrift Store", "cat": "thrift", "typeLabel": "vintage/thrift", "neighborhood": "Lincoln Heights", "address": "210 N Avenue 21, Los Angeles, CA 90031", "what": "A huge donation-based thrift store run by the Society of St. Vincent de Paul Council of Los Angeles. Room after room of used clothing, furniture and household goods at bargain prices.", "hook": "LA's largest thrift store. Room after room of odd finds and bargains.", "facts": ["The Society calls it L.A.'s largest thrift store, and travel writers describe it as packed room after room with bargains.", "It sells used clothing, shoes, furniture, housewares and home goods, all donated.", "Regulars say it hides odd finds in every corner, from vintage chairs to skee-ball machines.", "The store moved from Chinatown to this Lincoln Heights location in 1969.", "Proceeds support the Society of St. Vincent de Paul's charitable programs in Los Angeles."], "price": "Thrift prices; free entry", "hours": "211LA listing: Mon-Sat 9:30am-6:00pm, Sun 9:00am-5:00pm (sources conflict; call 323-226-9643 to confirm)", "age": null, "booking": "Walk in", "website": "https://svdpla.org/", "img": "images/20.jpg", "lat": 34.0773942, "lon": -118.2208159, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm"], "slots": 1, "when": "Open daily", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon", "gallery": null}, {"id": "v21", "name": "TROVE", "cat": "thrift", "typeLabel": "vintage/thrift", "neighborhood": "West Los Angeles", "address": "2008 Westwood Blvd, Los Angeles, CA 90025", "what": "A consignment and thrift shop on Westwood Blvd in West LA that sells secondhand clothing, jewelry, housewares and collectibles. Stock ranges from mall brands to designer labels.", "hook": "Department-store-style consignment, from Zara to Prada.", "facts": ["It is a department-store-style consignment shop with clothing, jewelry, housewares and collectibles.", "Clothing runs from Zara to Prada, and listings mention brands like Gucci, Chanel and Calvin Klein.", "It describes itself as a top consignment and thrift shop in Los Angeles.", "It has a free parking lot."], "price": "Thrift/consignment prices; free entry", "hours": "Official hours page: Mon-Sat 11am-7pm, Sun 12pm-6pm (third-party listings differ slightly)", "age": null, "booking": "Walk in", "website": "https://www.trove.la/", "img": "images/21.jpg", "lat": 34.0465576, "lon": -118.4337951, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm"], "slots": 1, "when": "Open daily", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon", "gallery": null}, {"id": "v22", "name": "Lemon Frog Shop Vintage", "cat": "thrift", "typeLabel": "vintage/thrift", "neighborhood": "Echo Park", "address": "1202 N Alvarado St, Los Angeles, CA 90026", "what": "A tiny, maximalist vintage shop in Echo Park packed floor to ceiling with clothing and accessories, mostly from the 1950s through the 1990s. A California Certified Green Business.", "hook": "A closet-sized shop stuffed floor to ceiling with 50s to 90s vintage.", "facts": ["The shop is about the size of a walk-in closet but is stuffed floor to ceiling with rare vintage finds.", "Stock covers clothing, shoes, purses, sunglasses, belts and jewelry, mostly from the 1950s through the 1990s.", "The focus is women's vintage from the '50s through the '80s.", "Vintage footwear often comes from Brazil, Italy and Spain.", "It is known for hundreds of items priced around $10.", "It is a California Certified Green Business."], "price": "Many items around $10; free entry", "hours": "Time Out says 'call for hours'; an older Patch post listed 11:30am-7:30pm. Phone 213-413-2143.", "age": null, "booking": "Walk in", "website": null, "img": "images/22.jpg", "lat": 34.078344, "lon": -118.262842, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm"], "slots": 1, "when": "Call for hours", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon", "gallery": null}, {"id": "v23", "name": "Melrose Trading Post", "cat": "market", "typeLabel": "vintage market", "neighborhood": "Fairfax", "address": "7850 Melrose Ave, Los Angeles, CA 90046 (Fairfax High School campus)", "what": "A Sunday flea market held every week on the Fairfax High School campus with vintage clothing, handmade goods, art, food and live music. Proceeds fund arts programs at Fairfax High.", "hook": "A Sunday flea market with vintage, art and live music that funds school arts programs.", "facts": ["It runs every Sunday, rain or shine, on the Fairfax High School campus at Melrose and Fairfax.", "Vendors sell vintage clothing, handmade goods, art, antiques and food, with live music.", "Proceeds fund the Greenway Institute for the Arts, which provides free in-school and after-school arts programs for Fairfax High and LAUSD students.", "Students 13+ with a school ID get $1 off in-person admission.", "The market also supports Greenway Court Theatre, a professional theatre on the campus.", "Every December Sunday it becomes the 'Merry Melrose' holiday edition."], "price": "$6 cash admission at the gate ($6 + $2.25 fee for online pre-paid ticket); students 13+ with school ID and seniors 65+ pay $1 less in person", "hours": "Sundays only, 10 AM-5 PM; summer hours 10 AM-6 PM Memorial Day to Labor Day; last cash ticket sold at 4:45 PM (official site, plan-your-visit page)", "age": "All ages; student discount for ages 13+ with school ID", "booking": "Walk up and pay cash at the entrance, or buy a scannable pre-paid ticket online", "website": "https://melrosetradingpost.org/", "img": "images/23.jpg", "lat": 34.0833982, "lon": -118.3594799, "blocks": ["sun-am", "sun-pm"], "slots": 1, "when": "Sunday market, 10am to 5pm", "spanOption": false, "whenText": "Sun morning, Sun afternoon", "gallery": null}, {"id": "v24", "name": "Squaresville", "cat": "thrift", "typeLabel": "vintage/thrift", "neighborhood": "Los Feliz", "address": "1800 N Vermont Ave, Los Angeles, CA 90027", "what": "A two-story buy-sell-trade vintage clothing store in Los Feliz. You can shop racks of past-decade clothing or bring in your own secondhand pieces for cash, trade or consignment.", "hook": "Two floors of buy-sell-trade vintage. Bring old clothes for cash or trade.", "facts": ["It is a buy-sell-trade store, so you can bring in your own secondhand clothing for payment, trade or consignment.", "New pieces come in daily because of the constant trade-in flow.", "It is two stories, with men's and women's clothing plus accessories, handbags and shoes from past decades.", "Stock covers all genders, from formalwear to T-shirts, and is popular for playful costume-style finds.", "Its sister shop Urchin is a few doors down at 1766 N Vermont but does not buy or trade."], "price": "Mid-range vintage prices; free entry", "hours": "Time Out listing: Sun-Mon noon-7pm, Tue-Thu 11am-8pm, Fri-Sat 11am-9pm (may have changed; phone (323) 669-8464)", "age": null, "booking": "Walk in; bring items to sell or trade in person", "website": null, "img": "images/24.jpg", "lat": 34.10369379999999, "lon": -118.2916222, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm", "sat-night", "sun-night"], "slots": 1, "when": "Open daily, late on Saturday", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon, Sat night, Sun night", "gallery": null}, {"id": "v25", "name": "Animate LA", "cat": "books", "typeLabel": "anime store", "neighborhood": "Torrance", "address": "3525 W Carson St, Suite 511, Torrance, CA 90503 (also listed as 21540 Hawthorne Blvd, Unit 511)", "what": "The U.S. store of animate, Japan's biggest anime retailer, inside the Del Amo Fashion Center mall. It sells manga, figures, trading cards, character goods and other anime merchandise.", "hook": "The first US store of Japan's biggest anime retailer. Figures, cards, manga.", "facts": ["It is the first U.S. store of animate, Japan's largest anime merchandise chain, and opened in the Del Amo Fashion Center in summer 2023.", "It carries manga, comics, light novels and art books, plus figures, trading cards, keychains, stickers and other character goods.", "It stocks VTuber merchandise and game-related products, including goods from both inside and outside the U.S.", "It sells Japanese snacks that come with toys.", "It is in the same mall as Kinokuniya's Torrance bookstore (in Mitsuwa Marketplace), so anime shopping can be combined."], "price": "Free entry; merchandise prices vary", "hours": "Official store page: Mon-Fri 10:00-21:00, Sat 10:00-20:00, Sun 11:00-19:00", "age": null, "booking": "Walk in; phone (310) 782-4636", "website": "https://www.animate.co.jp/en/shop/losangeles/", "img": "images/25.jpg", "lat": 33.8330001, "lon": -118.3505325, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm"], "slots": 1, "when": "Open daily", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon", "gallery": null}, {"id": "v26", "name": "Canter's Deli", "cat": "eat", "typeLabel": "restaurant", "neighborhood": "Fairfax", "address": "419 N Fairfax Ave, Los Angeles, CA 90036", "what": "A famous old-school Jewish deli on Fairfax Avenue with a bakery counter and the Kibitz Room bar. It is a late-night LA landmark that has been serving pastrami and matzo ball soup since the 1930s.", "hook": "A 1931 Jewish deli inside an old movie theater, with a late-night music bar attached.", "facts": ["Canter's opened in 1931 on Brooklyn Avenue in Boyle Heights, moved to Fairfax in 1948, and since 1953 has occupied the old Esquire Theatre building, which is why the dining room is so big.", "It is known for classic deli food like pastrami sandwiches and matzo ball soup, plus fresh baked goods from its bakery counter.", "The attached Kibitz Room bar opened in 1961 and became a late-night musicians' hangout where Lenny Kravitz, Slash, Haim, The Kooks and Red Hot Chili Peppers have played.", "It celebrated its 95th anniversary on August 3, 2026 by selling pastrami sandwiches for 95 cents, drawing hundreds of customers.", "Canter's was featured in Hellmann's 2026 Super Bowl commercial.", "It is on the Los Angeles Conservancy's list of historic places."], "price": "$$ (deli prices)", "hours": "Sources conflict: Canter's own site says it serves 24 hours a day, while an OpenTable listing shows Mon-Thu 6am-11:30pm, Fri-Sat until 5am, Sun until 11:30pm, and the Kibitz Room closes at 2am. Confirm before a late-night visit.", "age": "Restaurant is all ages; the Kibitz Room is a bar (21+)", "booking": "Walk in; listed on OpenTable", "website": "https://cantersdeli.com/", "img": "images/26.jpg", "lat": 34.0787779, "lon": -118.3618587, "blocks": ["sat-am", "sun-am", "mon-am", "sat-pm", "sun-pm", "mon-pm", "sat-night", "sun-night"], "slots": 1, "when": "Open 24 hours", "spanOption": false, "whenText": "Sat morning, Sun morning, Mon morning, Sat afternoon, Sun afternoon, Mon afternoon, Sat night, Sun night", "gallery": null}, {"id": "v27", "name": "Six Flags Magic Mountain", "cat": "park", "typeLabel": "theme park", "neighborhood": "Valencia, Santa Clarita", "address": "26101 Magic Mountain Pkwy, Valencia, CA 91355", "what": "A roller-coaster-focused theme park just off Interstate 5 in Valencia, north of Los Angeles, that holds the Guinness record for the most roller coasters at a single park. In late November through early January it runs the Holiday in the Park lights-and-shows event, included with regular admission.", "hook": "20 roller coasters, the most of any theme park on earth.", "facts": ["20 roller coasters, the most of any theme park in the world (Guinness World Records, set when Wonder Woman: Flight of Courage opened in July 2022).", "Next new coaster is Thrill Glider, a Vekoma multi-launch suspended 'hovercycle' coaster announced Sept 10, 2026: 107 ft tall, 50 mph, 3,380 ft of track, five inversions, 48-inch minimum height. It was delayed from 2026 and now opens in 2027, so it will NOT be running on a Dec 2026 / Jan 2027 visit (construction is visible near Looney Tunes Land).", "Headline coasters and their height minimums: X2 (48 in), Twisted Colossus (48 in), Tatsu flying coaster (54 in). An average 16-year-old clears all of them.", "Holiday in the Park 2026-27 runs on select dates Nov 26, 2026 through Jan 3, 2027 per the official events page; light displays, live shows and most rides are included with park admission (food, merchandise and some holiday add-ons cost extra).", "Chaperone policy: guests 15 and under must be with a chaperone aged 21+ from 4:00 PM daily, and the chaperone shows government photo ID at entry. A 16-year-old is outside the rule but third-party guides say guests 16+ may be asked for ID.", "Bag screening: the park has x-rayed all bags and limited bag size to 12 x 12 x 6 inches during Fright Fest (announced Oct 2022); whether that limit is in force in Dec 2026 is unconfirmed, so bring a small bag."], "price": "Single-day ticket: online from $55, gate price $110 (sixflags.com daily-tickets page, Oct 2026; price varies by date, taxes may apply). Parking is extra: third-party guides in 2026 report general parking from about $40 (prepaying online is cheaper), with preferred and front-gate tiers higher; exact parking rates not confirmed on the official site.", "hours": "Hours vary by date; the park runs a seasonal calendar and the official December 2026 day-by-day schedule was not yet confirmed as of 2026-10-31. Holiday in the Park is listed as select dates Nov 26, 2026 - Jan 3, 2027 (official events page, retrieved 2026-10-31); third-party listings suggest Dec 7-10 are likely non-event days. Check the sixflags.com/magicmountain calendar for exact days and closing times before buying date-specific tickets.", "age": "No general age minimum; rides are gated by height (most big coasters 48 in, Tatsu 54 in). The chaperone policy applies to guests 15 and under after 4 PM (chaperone must be 21+ with photo ID), so a 16-year-old with a parent is fully covered; carry ID for the teen in case staff ask.", "booking": "Buy date-specific tickets online in advance (online from $55 vs $110 at the gate) and prepay parking online. Holiday in the Park is included with admission, no separate event ticket needed. Official calendar hours for Dec 2026 were not posted at research time, so confirm the visit date is an operating day.", "website": "https://www.sixflags.com/magicmountain", "img": "images/27.jpg", "lat": 34.4253, "lon": -118.5971, "blocks": ["sun-am"], "slots": 2, "when": "Sunday morning, or a full Sunday", "spanOption": true, "whenText": "Sun morning", "gallery": null}, {"id": "v28", "name": "La Mirada Theatre", "cat": "show", "typeLabel": "theater", "neighborhood": "La Mirada", "address": "14900 La Mirada Blvd, La Mirada, CA 90638", "what": "A city-run performing arts theatre in La Mirada that stages a five-show Broadway Series with McCoy Rigby Entertainment. Dear Evan Hansen runs here Oct 30 to Nov 22, 2026.", "hook": "Dear Evan Hansen, regional premiere. Sat 2pm and 8pm, Sun 1:30pm and 6:30pm.", "facts": ["Dear Evan Hansen plays here through Nov 22, 2026. On your weekend: Sat Nov 7 at 2pm and 8pm, Sun Nov 8 at 1:30pm and 6:30pm. About 2.5 hours with one intermission.", "Dear Evan Hansen is recommended for ages 13 and up. It has adult language and deals with depression and suicide.", "The theatre opened in 1977 in a converted movie house and is owned and run by the City of La Mirada.", "McCoy Rigby Entertainment produces its Broadway Series of five professional shows a year. The 2026-27 season also has Little Shop of Horrors and Les Miserables.", "About 1,250 seats, so it feels big but not cavernous.", "Parking is free in the lot next door, shared with a shopping center. It fills up, so arrive early."], "price": "Single-ticket face value not posted online. Season-package seats run about $109 to $356. Resale sites quote more. Online orders add a 10% fee per ticket.", "hours": "Show times only. Box office 714-994-6310.", "age": "Varies by show; Dear Evan Hansen is recommended for ages 13+.", "booking": "Book direct at lamiradatheatre.com/tickets. Skip resale sites.", "website": "https://lamiradatheatre.com/", "img": "images/28.jpg", "lat": 33.9169, "lon": -118.0117, "blocks": ["sat-pm", "sat-night", "sun-pm", "sun-night"], "slots": 2, "when": "Sat 2pm or 8pm, Sun 1:30pm or 6:30pm", "spanOption": false, "whenText": "Sat afternoon, Sat night, Sun afternoon, Sun night", "gallery": null}], "blocks": [{"id": "sat-am", "label": "Sat morning"}, {"id": "sat-pm", "label": "Sat afternoon"}, {"id": "sat-night", "label": "Sat night"}, {"id": "sun-am", "label": "Sun morning"}, {"id": "sun-pm", "label": "Sun afternoon"}, {"id": "sun-night", "label": "Sun night"}, {"id": "mon-am", "label": "Mon morning"}, {"id": "mon-pm", "label": "Mon afternoon"}]};
+</script>
+<script>
+(() => {
+const $ = (s, r=document) => r.querySelector(s);
+const el = (t, a={}, ...k) => { const e=document.createElement(t); for (const [n,v] of Object.entries(a)) { if(n==='class') e.className=v; else if(n.startsWith('on')) e.addEventListener(n.slice(2),v); else e.setAttribute(n,v);} for (const c of k.flat()) if(c!=null) e.append(c.nodeType?c:document.createTextNode(c)); return e; };
+const VEN = DATA.venues, CATS = DATA.categories;
+const byCat = id => VEN.filter(v => v.cat === id);
+const catOf = v => CATS.find(c => c.id === v.cat);
+const store = { get(k,d){ try{ const v=localStorage.getItem('bde.'+k); return v?JSON.parse(v):d }catch{ return d } }, set(k,v){ try{ localStorage.setItem('bde.'+k, JSON.stringify(v)) }catch{} } };
+
+/* ---------- views ---------- */
+const views = ['start','rank','scores','results'];
+function show(name){
+  for (const v of views) $('#v-'+v).hidden = v!==name;
+  document.querySelectorAll('.steps button').forEach(b => b.dataset.view===name ? b.setAttribute('aria-current','page') : b.removeAttribute('aria-current'));
+  if (name==='rank') renderMD(); if (name==='scores') renderScores(); if (name==='results') renderResults();
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('.steps button').forEach(b => b.addEventListener('click', () => show(b.dataset.view)));
+$('#toRank').addEventListener('click', () => show('rank'));
+$('#toRankTop').addEventListener('click', () => show('rank'));
+$('#toResults').addEventListener('click', () => show('results'));
+
+/* ---------- start: one card per kind of day ---------- */
+const kinds = $('#kinds');
+for (const c of CATS) {
+  const vs = byCat(c.id); if (!vs.length) continue;
+  kinds.append(el('article',{class:'kind'},
+    el('img',{src:c.img,alt:''}),
+    el('div',{class:'body'},
+      el('h3',{}, c.label),
+      el('p',{}, c.blurb),
+      el('div',{class:'places'}, vs.flatMap(v => [el('button',{type:'button',onclick:()=>openPanel(v)}, v.name), v.gallery ? el('a',{class:'gal',href:v.gallery,target:'_blank',rel:'noopener'}, 'Gallery') : null])))));
+}
+
+/* ---------- Claude (sample) ---------- */
+let sample = null, sampleReady = (async () => { try { sample = await window.claude?.use?.('sample') ?? null; } catch { sample = null; } })();
+const summaries = {}, chats = {};
+function factsBlock(v){
+  const lines = [`Name: ${v.name}`, `Type: ${v.typeLabel}`, `Neighborhood: ${v.neighborhood}`, v.address && `Address: ${v.address}`, `What it is: ${v.what}`,
+    ...v.facts.map(f => `- ${f}`), `Possible times on this trip (Nov 7 to 9): ${v.whenText}. ${v.when}.`, v.price && `Price: ${v.price}`, v.hours && `Hours: ${v.hours}`, v.age && `Age note: ${v.age}`, v.booking && `Booking: ${v.booking}`].filter(Boolean);
+  return lines.join('\n');
+}
+const summaryPrompt = v => `Write a short summary of one place for a reader who is 16, smart, and choosing how to spend a birthday weekend in Los Angeles. About 100 to 130 words in two or three short paragraphs. Lead with what is special about this place and what she would actually do there. Do not mention neighborhoods, streets, cities, towns, or addresses at all. Plain words. No hype, no emojis, no exclamation points, no greeting. Use only the facts below. Do not add hours, prices, or claims that are not in the facts. End with one line that starts with "Good for:" naming the kind of day this fits.\n\nFacts:\n${factsBlock(v)}`;
+const chatIntro = v => `You answer questions about one place for a 16-year-old planning a birthday weekend in Los Angeles. Facts on file:\n${factsBlock(v)}\n\nRules: Answer from the facts on file first. You may add general knowledge about this place or neighborhood when you are confident, and say "from general knowledge" when you do. Never state hours, prices, menus, or whether something is open, sold out, or bookable unless it is in the facts on file; say that needs a check with Mom. Under 120 words. Plain words. No emojis. No greeting.\n\nQuestion: `;
+async function runSummary(v, box){
+  if (summaries[v.id]) { box.textContent = summaries[v.id]; box.classList.remove('wait'); return; }
+  await sampleReady;
+  if (!sample) { box.textContent = v.hook; box.classList.remove('wait'); return; }
+  box.classList.add('wait'); box.textContent = 'Thinking...';
+  try {
+    const r = await sample(summaryPrompt(v), { modelTier:'default', onText:({text}) => { if(text){ box.textContent = text; box.classList.remove('wait'); } } });
+    summaries[v.id] = r.text; box.textContent = r.text; box.classList.remove('wait');
+  } catch (e) {
+    box.classList.remove('wait'); box.textContent = e?.text || v.hook;
+    if (e?.code==='not_granted' || e?.code==='sampling_disabled') { sample = null; $('#askwrap')?.remove(); }
+  }
+}
+async function ask(v, q, log, input, btn){
+  const turns = chats[v.id] ||= [];
+  turns.push({role:'user', content:(turns.length?'' : chatIntro(v)) + q});
+  log.append(el('div',{class:'msg u'}, q));
+  const a = el('div',{class:'msg a wait'}, 'Thinking...'); log.append(a); a.scrollIntoView({block:'nearest'});
+  btn.disabled = true; input.value='';
+  try {
+    const r = await sample(turns, { modelTier:'default', cache:false, onText:({text}) => { if(text){ a.textContent=text; a.classList.remove('wait'); } } });
+    a.textContent = r.text; a.classList.remove('wait'); turns.push({role:'assistant', content:r.text});
+  } catch (e) {
+    turns.pop(); a.classList.remove('wait');
+    a.textContent = e?.code==='rate_limited' ? 'Too many questions at once. Wait a minute and try again.' : e?.code==='refused' ? 'That one I cannot answer here.' : 'That did not go through. Try again.';
+    if (e?.code==='not_granted' || e?.code==='sampling_disabled') { sample=null; $('#askwrap')?.remove(); }
+  }
+  btn.disabled = false; input.focus();
+}
+
+/* ---------- panel ---------- */
+const panel = $('#panel'), scrim = $('#scrim');
+function closePanel(){ panel.hidden = true; scrim.hidden = true; panel.replaceChildren(); document.body.style.overflow=''; }
+scrim.addEventListener('click', closePanel);
+document.addEventListener('keydown', e => { if (e.key==='Escape' && !panel.hidden) closePanel(); });
+function openPanel(v){
+  const meta = el('dl',{class:'meta'});
+  const row = (k,val) => { if(val) meta.append(el('dt',{},k), el('dd',{},val)); };
+  row('When', v.whenText + '. ' + v.when + '.'); row('Cost', v.price); row('Hours', v.hours); row('Age', v.age); row('Booking', v.booking); row('Where', v.address || v.neighborhood);
+  if (v.website) meta.append(el('dt',{},'Site'), el('dd',{}, el('a',{href:v.website,target:'_blank',rel:'noopener'}, v.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,''))));
+  const sum = el('div',{class:'summary wait'}, 'Thinking...');
+  const log = el('div',{class:'chat'});
+  const input = el('input',{id:'q-'+v.id,type:'text',placeholder:'Ask anything about this place',autocomplete:'off'});
+  const btn = el('button',{type:'submit'}, 'Ask');
+  const form = el('form',{class:'askrow',onsubmit:e => { e.preventDefault(); const q=input.value.trim(); if(q && sample) ask(v,q,log,input,btn); }}, input, btn);
+  const askwrap = el('div',{class:'ask',id:'askwrap'}, el('h3',{},'Questions?'), log, form, el('p',{class:'note'},'Answers come from the notes on this page plus general knowledge. Hours and prices get checked with Mom.'));
+  panel.replaceChildren(
+    el('button',{class:'close','aria-label':'Close',onclick:closePanel}, '×'),
+    el('img',{src:v.img,alt:''}),
+    el('div',{class:'inner'},
+      el('div',{}, el('span',{class:'chip'}, catOf(v).label), el('h2',{}, v.name), v.gallery ? el('a',{class:'btn galbtn',href:v.gallery,target:'_blank',rel:'noopener'}, 'Gallery') : null),
+      sum, meta,
+      el('div',{}, el('h3',{class:'chip'},'Quick facts'), el('ul',{class:'facts'}, v.facts.map(f => el('li',{},f)))),
+      askwrap));
+  panel.hidden = false; scrim.hidden = false; document.body.style.overflow='hidden'; panel.scrollTop = 0;
+  runSummary(v, sum);
+  sampleReady.then(() => { if (!sample) askwrap.remove(); });
+}
+
+/* ---------- rank: three rounds ----------
+   Round 1: kinds of day, best-worst, 4 per screen, each kind 3 times.
+   Round 2: places inside each kind, best-worst (or one pair when a kind has two places).
+   Round 3: head-to-head pairs between the top place of neighboring kinds. Tie-breaker weight only.
+   priority(place) = kindScore + 0.5 * placeScoreInKind + 0.25 * tieScore, each part in [-1, 1]. */
+function buildDesign(ids, seed, K, reps){
+  let s = seed; const rnd = () => (s = (s*1664525 + 1013904223) >>> 0) / 4294967296;
+  const n = ids.length; K = Math.min(K, n); const sets = Math.ceil(n*reps/K);
+  for (let attempt=0; attempt<200; attempt++){
+    const count = Object.fromEntries(ids.map(i=>[i,0])), out=[];
+    for (let t=0;t<sets;t++){
+      const pool = [...ids].sort((a,b)=> count[a]-count[b] || rnd()-.5);
+      const set = pool.slice(0,K); if (new Set(set).size<K) break;
+      set.forEach(i=>count[i]++); out.push(set.sort(()=>rnd()-.5));
+    }
+    if (out.length===sets && Math.max(...Object.values(count))-Math.min(...Object.values(count))<=1) return out;
+  }
+  return [ids.slice(0,K)];
+}
+const catIds = CATS.filter(c=>byCat(c.id).length).map(c=>c.id);
+const multiCats = CATS.filter(c=>byCat(c.id).length>=2);
+let design = store.get('design'); if (!design || design.flat().some(i=>!catIds.includes(i)) || new Set(design.flat()).size!==catIds.length) { design = buildDesign(catIds, Date.now()>>>0, 4, 3); store.set('design',design); }
+let design2 = store.get('design2', {});
+for (const c of multiCats) { const ids = byCat(c.id).map(v=>v.id); const d = design2[c.id]; if (!d || new Set(d.flat()).size!==ids.length || d.flat().some(i=>!ids.includes(i))) design2[c.id] = ids.length===2 ? [ids] : ids.length===3 ? [ids] : buildDesign(ids, (Date.now()+ids.length)>>>0, 4, 2); }
+store.set('design2', design2);
+let pairs3 = store.get('pairs3', null);
+let answers = store.get('answers', {}); let step = store.get('step', 0);
+const N3 = catIds.length - 1;
+const nameOf = id => VEN.find(v=>v.id===id);
+function screens(){
+  const s = [];
+  design.forEach((set,i) => s.push({id:'r1-'+i, kind:'md', items:set, title:'Which is the best of the best? Which is the least best?', col:'Kind of day', label:id=>CATS.find(c=>c.id===id).label, sub:id=>byCat(id).map(v=>v.name).join(' · ')}));
+  for (const c of multiCats) design2[c.id].forEach((set,i) => s.push({id:`r2-${c.id}-${i}`, kind: set.length===2 ? 'pair' : 'md', items:set, title: set.length===2 ? c.label + '. Which one?' : c.label + '. Best of the best, least best.', col:'Place', label:id=>nameOf(id).name, sub:id=>nameOf(id).hook}));
+  const n12 = s.length;
+  (pairs3 || Array.from({length:N3}, () => null)).forEach((pr,i) => s.push({id:'r3-'+i, kind:'pair', items:pr, title:'Which one?', label:id=>nameOf(id).name, sub:id=>nameOf(id).hook}));
+  s.n12 = n12; return s;
+}
+function mdMsg(t){ const m = $('#mdMsg'); m.textContent = t; m.hidden = !t; }
+function makePairs3(){
+  const order = catScores().map(s=>s.id);
+  const top = Object.fromEntries(order.map(id => [id, venuesRanked(id, true)[0].id]));
+  return order.slice(0,-1).map((id,i) => [top[id], top[order[i+1]]]);
+}
+function renderMD(){
+  let sc = screens(); const total = sc.length; step = Math.min(step, total);
+  if (step >= sc.n12 && step < total) { const fresh = makePairs3(); if (JSON.stringify(fresh) !== JSON.stringify(pairs3)) { pairs3 = fresh; store.set('pairs3', pairs3); for (const k of Object.keys(answers)) if (k.startsWith('r3-')) delete answers[k]; store.set('answers', answers); sc = screens(); } }
+  $('#pbar').style.width = (100*step/total)+'%';
+  $('#mdCount').textContent = step>=total ? `All ${total} screens done.` : `Screen ${step+1} of ${total}`;
+  mdMsg('');
+  const box = $('#mdbox'); box.replaceChildren();
+  if (step>=total){ $('#mdTitle').textContent = 'Ranking done.'; $('#mdNext').textContent='See your priorities'; $('#mdNext').disabled=false; $('#mdNext').onclick=()=>show('scores'); $('#mdBack').disabled = false; return; }
+  const s = sc[step], a = answers[s.id] || {};
+  $('#mdTitle').textContent = s.title;
+  if (s.kind==='md') {
+    const md = el('div',{class:'md'}, el('div',{class:'hdr'}, el('span',{},'Best of the best'), el('span',{},s.col), el('span',{},'Least best')));
+    for (const id of s.items){
+      md.append(el('div',{class:'row'},
+        el('label',{class:'best'}, el('input',{type:'radio',name:'best',value:id,id:'b-'+step+'-'+id,...(a.best===id?{checked:''}:{}),onchange:()=>pickMD(s.id,'best',id)})),
+        el('div',{class:'name'}, s.label(id), el('small',{}, s.sub(id), nameOf(id)?.gallery ? el('a',{class:'gal',href:nameOf(id).gallery,target:'_blank',rel:'noopener'}, 'Gallery') : null)),
+        el('label',{class:'worst'}, el('input',{type:'radio',name:'worst',value:id,id:'w-'+step+'-'+id,...(a.worst===id?{checked:''}:{}),onchange:()=>pickMD(s.id,'worst',id)}))));
+    }
+    box.append(md);
+  } else {
+    box.append(el('div',{class:'pair'}, s.items.map(id => el('div',{class:'pairwrap'}, el('button',{type:'button','aria-pressed': a.best===id ? 'true' : 'false', onclick:() => { answers[s.id] = {best:id, worst: s.items.find(x=>x!==id)}; store.set('answers',answers); renderMD(); }},
+      el('img',{src:nameOf(id).img, alt:''}), el('span',{}, el('b',{}, s.label(id)), el('small',{}, s.sub(id)))),
+      nameOf(id).gallery ? el('a',{class:'gal',href:nameOf(id).gallery,target:'_blank',rel:'noopener'}, 'Gallery') : null))));
+  }
+  $('#mdNext').textContent = step===total-1 ? 'Finish' : 'Next';
+  $('#mdNext').onclick = () => { step++; store.set('step',step); renderMD(); };
+  $('#mdBack').disabled = step===0;
+  syncNext(s);
+}
+function pickMD(sid,kind,id){
+  const a = answers[sid] ||= {}; const other = kind==='best' ? 'worst' : 'best';
+  if (a[other]===id) {
+    document.querySelector(`#mdbox input[name=${kind}][value="${id}"]`).checked = false;
+    if (a[kind]) document.querySelector(`#mdbox input[name=${kind}][value="${a[kind]}"]`).checked = true;
+    mdMsg(kind==='worst' ? 'That one is already your best of the best. Pick a different least best.' : 'That one is already your least best. Pick a different best of the best.');
+    return;
+  }
+  a[kind]=id; mdMsg(''); store.set('answers',answers); syncNext(screens()[step]);
+}
+function syncNext(s){ const a=answers[s.id]||{}; $('#mdNext').disabled = s.kind==='pair' ? !a.best : !(a.best && a.worst && a.best!==a.worst); }
+$('#mdBack').addEventListener('click', () => { if(step>0){ step--; store.set('step',step); renderMD(); } });
+let resetArmed = null;
+$('#mdReset').addEventListener('click', () => {
+  const b = $('#mdReset');
+  if (resetArmed) { clearTimeout(resetArmed); resetArmed = null; b.textContent = 'Restart ranking'; answers={}; step=0; pairs3=null; store.set('answers',answers); store.set('step',0); store.set('pairs3',null); renderMD(); return; }
+  b.textContent = 'Tap again to restart'; resetArmed = setTimeout(() => { resetArmed = null; b.textContent = 'Restart ranking'; }, 4000);
+});
+function tally(sets, prefix){
+  const t = {};
+  sets.forEach((set,i) => { const a = answers[prefix+i]; if (!a || !a.best || !a.worst) return; set.forEach(id => { t[id] ||= {b:0,w:0,n:0}; t[id].n++; }); t[a.best].b++; t[a.worst].w++; });
+  return id => t[id] && t[id].n ? (t[id].b - t[id].w) / t[id].n : 0;
+}
+function catScores(){ const f = tally(design, 'r1-'); return catIds.map(id => ({id, score:f(id)})).sort((x,y) => y.score - x.score); }
+function venScore(v){ const c = catOf(v); if (byCat(c.id).length < 2) return 0; return tally(design2[c.id], `r2-${c.id}-`)(v.id); }
+function tieScore(v){ if (!pairs3) return 0; let b=0,w=0,n=0; pairs3.forEach((pr,i) => { const a = answers['r3-'+i]; if (!a || !pr.includes(v.id)) return; n++; a.best===v.id ? b++ : w++; }); return n ? (b-w)/n : 0; }
+let order = store.get('order', null);   // manual override from drag and drop: {cats:[catId], venues:{catId:[venueId]}}
+const pos = (arr, n) => n < 2 ? 0 : 1 - 2 * arr / (n - 1);
+const catScoreOf = id => order ? pos(order.cats.indexOf(id), order.cats.length) : ((catScores().find(s=>s.id===id)||{}).score || 0);
+function priority(v, noTie){
+  if (order) { const vs = order.venues[v.cat] || byCat(v.cat).map(x=>x.id); return catScoreOf(v.cat) + 0.5 * pos(vs.indexOf(v.id), vs.length); }
+  return catScoreOf(v.cat) + 0.5*venScore(v) + (noTie ? 0 : 0.25*tieScore(v));
+}
+function venuesRanked(catId, noTie){ return byCat(catId).map(v => ({v, p:priority(v, noTie)})).sort((a,b) => b.p - a.p).map(x => x.v); }
+function catOrder(){ return order ? order.cats.slice() : catScores().map(s=>s.id); }
+function snapshotOrder(){ return { cats: catOrder(), venues: Object.fromEntries(catIds.map(id => [id, venuesRanked(id).map(v=>v.id)])) }; }
+function moveItem(arr, from, to){ const a = arr.slice(); const [x] = a.splice(from, 1); a.splice(to, 0, x); return a; }
+function setOrder(o){ order = o; store.set('order', o); renderScores(); }
+const ranked = () => design.some((set,i) => answers['r1-'+i]?.best);
+
+/* ---------- priorities ---------- */
+function makeSortable(container, itemSel, onMove){
+  let drag = null;
+  container.addEventListener('pointerdown', e => {
+    if (e.target.closest('button, a, input')) return;
+    const handle = e.target.closest(e.pointerType === 'touch' ? '.grip' : '.grip, .cathead, .vrow'); if (!handle) return;
+    const item = handle.closest(itemSel); if (!item || item.parentElement !== container) return;
+    e.stopPropagation();
+    const items = [...container.querySelectorAll(':scope > ' + itemSel)];
+    drag = {item, from: items.indexOf(item), to: items.indexOf(item)};
+    item.classList.add('dragging'); handle.setPointerCapture(e.pointerId); e.preventDefault();
+  });
+  container.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const items = [...container.querySelectorAll(':scope > ' + itemSel)];
+    items.forEach(i => i.classList.remove('over'));
+    const hit = document.elementFromPoint(e.clientX, e.clientY)?.closest(itemSel);
+    const idx = items.indexOf(hit);
+    if (idx >= 0) { drag.to = idx; if (hit !== drag.item) hit.classList.add('over'); }
+  });
+  const finish = e => { if (!drag) return; const {from, to, item} = drag; drag = null; item.classList.remove('dragging'); container.querySelectorAll('.over').forEach(i => i.classList.remove('over')); if (from !== to) onMove(from, to); };
+  container.addEventListener('pointerup', finish); container.addEventListener('pointercancel', finish);
+}
+function renderScores(){
+  const list = $('#slist'); list.replaceChildren();
+  if (!ranked()) { list.append(el('li',{style:'display:block'}, el('span',{class:'empty'},'No ranking yet. Do step 2 first.'))); $('#orderReset').hidden = true; return; }
+  const cats = catOrder();
+  cats.forEach((id, i) => {
+    const c = CATS.find(x=>x.id===id), vs = venuesRanked(id);
+    const sub = el('div',{class:'sub'});
+    vs.forEach((v, j) => {
+      sub.append(el('div',{class:'vrow'},
+        el('span',{class:'grip','aria-hidden':'true'}, '⋮⋮'),
+        el('span',{}, v.name),
+        el('div',{class:'bar'}, el('i',{style:`width:${Math.round(100*(priority(v)+1.75)/3.5)}%`})),
+        el('span',{class:'ud'}, el('button',{type:'button','aria-label':'Move up', ...(j===0?{disabled:''}:{}), onclick:()=>{ const o=snapshotOrder(); o.venues[id]=moveItem(o.venues[id], j, j-1); setOrder(o); }}, 'Up'),
+          el('button',{type:'button','aria-label':'Move down', ...(j===vs.length-1?{disabled:''}:{}), onclick:()=>{ const o=snapshotOrder(); o.venues[id]=moveItem(o.venues[id], j, j+1); setOrder(o); }}, 'Down'))));
+    });
+    makeSortable(sub, '.vrow', (from, to) => { const o=snapshotOrder(); o.venues[id]=moveItem(o.venues[id], from, to); setOrder(o); });
+    list.append(el('li',{},
+      el('div',{class:'cathead'}, el('span',{class:'grip','aria-hidden':'true'}, '⋮⋮'), el('b',{}, c.label),
+        el('span',{class:'ud'}, el('button',{type:'button','aria-label':'Move up', ...(i===0?{disabled:''}:{}), onclick:()=>{ const o=snapshotOrder(); o.cats=moveItem(o.cats, i, i-1); setOrder(o); }}, 'Up'),
+          el('button',{type:'button','aria-label':'Move down', ...(i===cats.length-1?{disabled:''}:{}), onclick:()=>{ const o=snapshotOrder(); o.cats=moveItem(o.cats, i, i+1); setOrder(o); }}, 'Down'))),
+      el('div',{class:'bar'}, el('i',{style:`width:${Math.round(50*(catScoreOf(id)+1))}%`})), sub));
+  });
+  makeSortable(list, 'li', (from, to) => { const o=snapshotOrder(); o.cats=moveItem(o.cats, from, to); setOrder(o); });
+  $('#orderReset').hidden = !order;
+}
+$('#orderReset').addEventListener('click', () => { order = null; store.set('order', null); renderScores(); });
+
+/* ---------- schedule ---------- */
+const BLOCKS = DATA.blocks, BL = Object.fromEntries(BLOCKS.map(b=>[b.id,b.label])), CAP = 2;
+let sched = store.get('sched', {});   // venueId -> {block, full, locked}
+let drafted = store.get('drafted', false);
+function setSched(id, patch){ sched[id] = Object.assign({}, sched[id] || {mode:'free'}, patch); store.set('sched', sched); }
+// migrate older entries that used a locked flag
+function migrate(){ for (const [id, e] of Object.entries(sched)) if (e && !e.mode) e.mode = e.locked ? (e.block ? 'in' : 'out') : 'free'; }
+migrate();
+const modeOf = id => sched[id]?.mode || 'free';
+const FIXED = {v04:'sat-night'};   // Groundlings: Saturday 9:30pm, always
+function enforceFixed(){ for (const [id,b] of Object.entries(FIXED)) if (VEN.some(v=>v.id===id)) sched[id] = {block:b, full:false, mode:'in', fixed:true}; }
+function pickedVenues(){ return VEN.map(v => ({v, cat:catOf(v), p:priority(v)})).sort((a,b) => b.p - a.p); }
+function blocksOf(v, sv){ if(!sv||!sv.block) return []; return sv.full ? ['sun-am','sun-pm'] : [sv.block]; }
+function usage(pv, except){
+  const used = Object.fromEntries(BLOCKS.map(b=>[b.id,0]));
+  for (const {v} of pv) { if (v.id===except) continue; for (const b of blocksOf(v, sched[v.id])) used[b] += v.slots; }
+  return used;
+}
+const siblingPlaced = v => catOf(v).exclusive && byCat(v.cat).some(o => o.id!==v.id && sched[o.id]?.block);
+function row(v, cat, pv){
+  const cur = sched[v.id] || {}, mode = modeOf(v.id), taken = siblingPlaced(v);
+  const when = cur.block ? (cur.full ? 'Sunday, full day' : BL[cur.block]) : null;
+  const head = el('span',{style:'min-width:0'}, el('b',{}, v.name, when ? el('span',{class:'when'}, when) : null), el('small',{}, cat.label + ' · ' + v.when, ' ', el('button',{class:'more',type:'button',onclick:()=>openPanel(v)}, 'Learn more')));
+  if (FIXED[v.id]) return el('li',{class:'placed in'}, head, el('div',{class:'ctl'}, el('span',{class:'st'}, 'Always on, ' + BL[FIXED[v.id]])));
+  const ctl = el('div',{class:'ctl'});
+  const seg = el('div',{class:'seg', role:'group','aria-label':'Lock state'});
+  for (const [m,label] of [['free','Unlocked'],['in','Locked in'],['out','Locked out']]) seg.append(el('button',{type:'button','aria-pressed': mode===m ? 'true' : 'false', class:'m-'+m, onclick:() => { if (mode===m) return; setSched(v.id, {mode:m, block: m==='out' ? null : cur.block, full: m==='out' ? false : cur.full}); renderResults(); }}, label));
+  ctl.append(seg);
+  if (v.spanOption) {
+    const cb = el('input',{type:'checkbox', id:'f-'+v.id, ...(cur.wantFull ? {checked:''} : {}), ...(mode==='out' ? {disabled:''} : {}), onchange:e => { setSched(v.id, {wantFull:e.target.checked}); renderResults(); }});
+    ctl.append(el('label',{class:'full', for:'f-'+v.id}, cb, 'Full day'));
+  }
+  const st = taken && !cur.block ? 'One salon only' : (mode==='in' && !cur.block) ? 'No room yet' : (mode==='free' && !cur.block) ? 'Did not fit' : '';
+  if (st) ctl.append(el('span',{class:'st' + (st==='No room yet' ? ' out' : '')}, st));
+  return el('li',{class: (cur.block ? 'placed' : '') + ' ' + mode}, head, ctl);
+}
+function renderResults(){
+  const lists = $('#lists'), grid = $('#grid8'); lists.replaceChildren(); grid.replaceChildren();
+  const pv = pickedVenues();
+  if (!ranked()) { lists.append(el('p',{class:'empty'},'No ranking yet. Do step 2 first.')); $('#schedStatus').textContent=''; return; }
+  const ids = new Set(pv.map(x=>x.v.id)); for (const id of Object.keys(sched)) if (!ids.has(id)) delete sched[id];
+  migrate(); enforceFixed(); store.set('sched', sched);
+  if (!drafted && !Object.values(sched).some(s=>s.block && !s.fixed)) { drafted = true; store.set('drafted', true); shuffle(true); return; }
+  const blockIndex = Object.fromEntries(BLOCKS.map((b,i)=>[b.id,i]));
+  const on = pv.filter(({v}) => sched[v.id]?.block).sort((a,b) => blockIndex[sched[a.v.id].block] - blockIndex[sched[b.v.id].block]);
+  const off = pv.filter(({v}) => !sched[v.id]?.block && modeOf(v.id)!=='out');
+  const lockedOut = pv.filter(({v}) => modeOf(v.id)==='out');
+  lists.append(el('h3',{}, `On the schedule (${on.length})`), el('ol',{class:'rlist'}, on.map(({v,cat}) => row(v,cat,pv))));
+  lists.append(el('h3',{}, `Not on the schedule (${off.length})`), el('ol',{class:'rlist'}, off.map(({v,cat}) => row(v,cat,pv))));
+  lists.append(el('h3',{}, `Locked out (${lockedOut.length})`), el('ol',{class:'rlist'}, lockedOut.length ? lockedOut.map(({v,cat}) => row(v,cat,pv)) : [el('li',{class:'emptyrow'}, el('span',{class:'empty'}, 'Nothing locked out.'))]));
+  const used = usage(pv, null);
+  const days = [['Sat','sat'],['Sun','sun'],['Mon','mon']], rows = [['Morning','am'],['Afternoon','pm'],['Night','night']];
+  for (const [d] of days) grid.append(el('h4',{}, d));
+  for (const [rl,rk] of rows) for (const [,dk] of days) {
+    const b = dk+'-'+rk;
+    if (!BL[b]) { grid.append(el('div',{class:'cell'}, el('div',{class:'bl'}, rl), el('div',{class:'leave'}, 'Heading home'))); continue; }
+    const items = pv.filter(({v}) => blocksOf(v, sched[v.id]).includes(b));
+    const cell = el('div',{class:'cell ' + (used[b]>=CAP ? 'full' : used[b]>0 ? 'some' : '')}, el('div',{class:'bl'}, rl));
+    for (const {v} of items) cell.append(el('div',{class:'item'}, v.name, modeOf(v.id)==='in' ? el('span',{class:'lk'}, 'locked in') : null));
+    if (!items.length) cell.append(el('div',{class:'leave'}, 'Open'));
+    grid.append(cell);
+  }
+  const out = lockedOut.length, inNoRoom = pv.filter(({v}) => modeOf(v.id)==='in' && !sched[v.id]?.block && !FIXED[v.id]).length, noFit = off.length - out - inNoRoom;
+  $('#schedStatus').textContent = `${on.length} on the schedule.` + (inNoRoom ? ` ${inNoRoom} locked in with no room. Lock something out or shuffle again.` : '') + (noFit ? ` ${noFit} did not fit.` : '') + (out ? ` ${out} locked out.` : '');
+}
+function shuffle(first){
+  const pv = pickedVenues();
+  enforceFixed();
+  for (const {v} of pv) if (!FIXED[v.id]) { const e = sched[v.id] || {mode:'free'}; sched[v.id] = {mode:e.mode||'free', wantFull:!!e.wantFull, block:null, full:false}; }
+  const used = usage(pv, null);
+  const fits = (b, v) => used[b] + v.slots <= CAP;
+  const skip = new Set();
+  for (const cat of CATS) { if (!cat.exclusive) continue; const vs = venuesRanked(cat.id).filter(v => modeOf(v.id)!=='out'); const pick = vs.find(v => modeOf(v.id)==='in') || vs[0]; byCat(cat.id).forEach(v => { if (!pick || v.id!==pick.id) skip.add(v.id); }); }
+  const place = v => {
+    if (v.spanOption) {
+      if (sched[v.id].wantFull && fits('sun-am', v) && fits('sun-pm', v)) { Object.assign(sched[v.id], {block:'sun-am', full:true}); used['sun-am'] += v.slots; used['sun-pm'] += v.slots; return; }
+      if (fits('sun-am', v)) { Object.assign(sched[v.id], {block:'sun-am', full:false}); used['sun-am'] += v.slots; }
+      return;
+    }
+    const open = v.blocks.filter(b => fits(b, v)); if (!open.length) return;
+    const b = open[Math.floor(Math.random() * open.length)];
+    Object.assign(sched[v.id], {block:b, full:false}); used[b] += v.slots;
+  };
+  for (const {v} of pv) if (!FIXED[v.id] && !skip.has(v.id) && modeOf(v.id)==='in') place(v);
+  for (const {v} of pv) if (!FIXED[v.id] && !skip.has(v.id) && modeOf(v.id)==='free') place(v);
+  store.set('sched', sched); renderResults();
+  if (first) $('#schedStatus').textContent = 'Here is a first draft. ' + $('#schedStatus').textContent;
+}
+$('#shuffle').addEventListener('click', () => shuffle(false));
+function scheduleText(){
+  const pv = pickedVenues();
+  return BLOCKS.map(b => { const names = pv.filter(({v}) => blocksOf(v, sched[v.id]).includes(b.id)).map(x=>x.v.name); return `${b.label}: ${names.length ? names.join(' + ') : 'open'}`; }).join('\n');
+}
+
+/* ---------- saved versions ---------- */
+let saved = store.get('saved', []);
+function renderSaved(){
+  const box = $('#savedbox'); box.replaceChildren();
+  if (!saved.length) return;
+  box.append(el('h3',{}, 'Saved versions'));
+  for (const s of saved) {
+    const placed = Object.values(s.sched).filter(x=>x.block).length;
+    box.append(el('div',{class:'sv'},
+      el('div',{class:'svh'}, el('b',{}, s.name), el('small',{}, `${placed} placed · saved ${new Date(s.at).toLocaleString([], {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'})}`)),
+      el('pre',{}, s.text),
+      el('div',{class:'actions'},
+        el('button',{class:'btn', type:'button', onclick:() => { sched = JSON.parse(JSON.stringify(s.sched)); store.set('sched',sched); renderResults(); $('#saveNote').textContent = `Loaded "${s.name}".`; window.scrollTo({top:0}); }}, 'Load'),
+        el('button',{class:'btn ghost', type:'button', onclick:e => { const b=e.currentTarget; if (b.dataset.armed) { saved = saved.filter(x => x.id !== s.id); store.set('saved',saved); renderSaved(); return; } b.dataset.armed='1'; b.textContent='Tap again to delete'; setTimeout(()=>{ delete b.dataset.armed; b.textContent='Delete'; }, 4000); }}, 'Delete'))));
+  }
+}
+$('#saveForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = $('#saveName'), name = input.value.trim() || `Version ${saved.length + 1}`;
+  saved.unshift({id: Date.now().toString(36), name, at: Date.now(), sched: JSON.parse(JSON.stringify(sched)), text: scheduleText()});
+  store.set('saved', saved); input.value = ''; $('#saveNote').textContent = `Saved "${name}".`; renderSaved();
+});
+renderSaved();
+})();
+</script>
+</body></html>
