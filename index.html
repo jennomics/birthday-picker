@@ -150,6 +150,11 @@ a.gal{display:inline-flex;align-items:center;align-self:flex-start;border:1px so
 .cell .gl.m-out{border-color:var(--fg);background:var(--fg);color:var(--bg)}
 .cell .gl.fixed{border-color:var(--accent);color:var(--accent)}
 .cell .leave{color:var(--muted);font-style:italic;margin-top:6px;font-size:14px}
+.cell .item{cursor:grab;touch-action:none;user-select:none;border-radius:8px;padding:3px 4px;margin-left:-4px}
+.cell .item.fixed{cursor:default}
+.cell .item.dragging{opacity:.45}
+.cell.ok{border-style:dashed;border-color:var(--accent)}
+.cell.over{background:color-mix(in srgb,var(--accent) 16%,var(--surface));border-style:solid}
 @media (max-width:900px){.cell .item{grid-template-columns:1fr}.cell .item img{display:none}}
 .lists{--bg:#1c1a17;--surface:#262320;--fg:#f3ede2;--muted:#b3a996;--line:#3b362f;--accent:#4fb8bb;--accent-ink:#10201f;--pop:#ff8a62;--sun:#f0c15a;color-scheme:dark;
   background:var(--bg);color:var(--fg);border-radius:14px;padding:14px 14px 18px;font-size:14px}
@@ -618,13 +623,13 @@ function renderResults(){
     const b = dk+'-'+rk;
     if (!BL[b]) { grid.append(el('div',{class:'cell'}, el('div',{class:'bl'}, rl), el('div',{class:'leave'}, 'Heading home'))); continue; }
     const items = pv.filter(({v}) => blocksOf(v, sched[v.id]).includes(b));
-    const cell = el('div',{class:'cell ' + (used[b]>=CAP ? 'full' : used[b]>0 ? 'some' : '')}, el('div',{class:'bl'}, rl));
+    const cell = el('div',{class:'cell ' + (used[b]>=CAP ? 'full' : used[b]>0 ? 'some' : ''), 'data-block':b}, el('div',{class:'bl'}, rl));
     for (const {v} of items) {
       const m = modeOf(v.id);
       const pill = FIXED[v.id]
         ? el('span',{class:'gl fixed'}, 'Always on')
         : el('button',{type:'button', class:'gl m-'+m, title:'Tap to change', onclick:() => { const next = m==='free' ? 'in' : m==='in' ? 'out' : 'free'; setSched(v.id, {mode:next, block: next==='out' ? null : sched[v.id].block, full: next==='out' ? false : sched[v.id].full}); renderResults(); }}, m==='free' ? 'Unlocked' : m==='in' ? 'Locked in' : 'Locked out');
-      cell.append(el('div',{class:'item'}, el('img',{src:v.img, alt:''}), el('span',{class:'nm'}, v.name), pill));
+      cell.append(el('div',{class:'item' + (FIXED[v.id] ? ' fixed' : ''), 'data-vid':v.id}, el('img',{src:v.img, alt:''}), el('span',{class:'nm'}, v.name), pill));
     }
     if (!items.length) cell.append(el('div',{class:'leave'}, 'Open'));
     grid.append(cell);
@@ -632,6 +637,42 @@ function renderResults(){
   const out = lockedOut.length, inNoRoom = pv.filter(({v}) => modeOf(v.id)==='in' && !sched[v.id]?.block && !FIXED[v.id]).length, noFit = off.length - out - inNoRoom;
   $('#schedStatus').textContent = `${on.length} on the schedule.` + (inNoRoom ? ` ${inNoRoom} locked in with no room. Lock something out or shuffle again.` : '') + (noFit ? ` ${noFit} did not fit.` : '') + (out ? ` ${out} locked out.` : '');
 }
+/* drag an item from one cell to another */
+(() => {
+  const grid = $('#grid8'); let drag = null;
+  const canDrop = (v, b) => {
+    if (!v.blocks.includes(b)) return false;
+    const pv = pickedVenues(); const used = usage(pv, v.id);
+    if (sched[v.id]?.full) return used['sun-am'] + v.slots <= CAP && used['sun-pm'] + v.slots <= CAP;
+    return used[b] + v.slots <= CAP;
+  };
+  grid.addEventListener('pointerdown', e => {
+    if (e.target.closest('button')) return;
+    const item = e.target.closest('.item'); if (!item || item.classList.contains('fixed')) return;
+    const v = VEN.find(x => x.id === item.dataset.vid); if (!v) return;
+    drag = {v, item, from: sched[v.id]?.block};
+    item.classList.add('dragging'); item.setPointerCapture(e.pointerId); e.preventDefault();
+    for (const c of grid.querySelectorAll('.cell[data-block]')) c.classList.toggle('ok', canDrop(v, c.dataset.block));
+  });
+  grid.addEventListener('pointermove', e => {
+    if (!drag) return;
+    grid.querySelectorAll('.cell.over').forEach(c => c.classList.remove('over'));
+    const c = document.elementFromPoint(e.clientX, e.clientY)?.closest('.cell[data-block]');
+    if (c && c.classList.contains('ok')) c.classList.add('over');
+  });
+  const finish = e => {
+    if (!drag) return;
+    const {v, item} = drag; drag = null; item.classList.remove('dragging');
+    const c = e.type === 'pointerup' ? document.elementFromPoint(e.clientX, e.clientY)?.closest('.cell[data-block]') : null;
+    grid.querySelectorAll('.cell').forEach(x => x.classList.remove('ok','over'));
+    if (!c) return;
+    const b = c.dataset.block;
+    if (b === sched[v.id]?.block) return;
+    if (!canDrop(v, b)) { $('#schedStatus').textContent = v.blocks.includes(b) ? `No room in ${BL[b]}.` : `${v.name} cannot go in ${BL[b]}.`; return; }
+    setSched(v.id, {block:b, mode:'in'}); renderResults();
+  };
+  grid.addEventListener('pointerup', finish); grid.addEventListener('pointercancel', finish);
+})();
 function shuffle(first){
   const pv = pickedVenues();
   enforceFixed();
