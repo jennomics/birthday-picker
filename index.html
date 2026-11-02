@@ -125,12 +125,13 @@ a.gal{display:inline-flex;align-items:center;align-self:flex-start;border:1px so
 
 /* schedule */
 .results{padding-block:26px}
-.status{margin:10px 0 0;font-size:15px;font-weight:600;color:var(--pop)}
+.status{margin:0;font-size:15px;font-weight:600;color:var(--pop)}
 .schedwrap{display:grid;grid-template-columns:minmax(0,0.72fr) minmax(0,1.6fr);gap:24px;margin-top:18px;align-items:start}
 @media (max-width:900px){.schedwrap{grid-template-columns:1fr}}
-@media (min-width:901px){.schedwrap .grid8{grid-column:2;grid-row:1}.schedwrap .lists{grid-column:1;grid-row:1}}
-.grid8{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;position:sticky;top:calc(72px + env(safe-area-inset-top,0px))}
-@media (max-width:900px){.grid8{position:static}}
+@media (min-width:901px){.schedwrap .gridcol{grid-column:2;grid-row:1;position:sticky;top:calc(72px + env(safe-area-inset-top,0px))}.schedwrap .lists{grid-column:1;grid-row:1}}
+.gridhead{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:14px;text-align:center}
+.gridhead .status{margin:0}
+.grid8{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .grid8{gap:10px}
 .grid8 h4{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.02em;color:var(--fg);text-align:center;margin:0}
 .cell{background:var(--surface);border:1px solid var(--line);border-radius:12px;min-height:120px;padding:10px 12px 12px;font-size:15px;min-width:0}
@@ -252,9 +253,11 @@ a.gal{display:inline-flex;align-items:center;align-self:flex-start;border:1px so
 
   <section id="v-results" class="results" hidden>
     <h2>Fit it into the weekend</h2>
-    <div class="actions"><button class="btn" id="shuffle">Shuffle the unlocked</button><span class="status" id="schedStatus"></span></div>
     <div class="schedwrap">
-      <div class="grid8" id="grid8"></div>
+      <div class="gridcol">
+        <div class="gridhead"><button class="btn" id="shuffle">Shuffle the unlocked</button><p class="status" id="schedStatus"></p></div>
+        <div class="grid8" id="grid8"></div>
+      </div>
       <div class="lists" id="lists"></div>
     </div>
     <form class="saverow" id="saveForm"><input type="text" id="saveName" placeholder="Name this version" autocomplete="off" maxlength="40"><button class="btn ghost" type="submit">Save this version</button><span class="note" id="saveNote"></span></form>
