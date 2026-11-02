@@ -126,19 +126,26 @@ a.gal{display:inline-flex;align-items:center;align-self:flex-start;border:1px so
 /* schedule */
 .results{padding-block:26px}
 .status{margin:10px 0 0;font-size:15px;font-weight:600;color:var(--pop)}
-.schedwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px;margin-top:18px;align-items:start}
+.schedwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);gap:24px;margin-top:18px;align-items:start}
 @media (max-width:900px){.schedwrap{grid-template-columns:1fr}}
 @media (min-width:901px){.schedwrap .grid8{grid-column:2;grid-row:1}.schedwrap .lists{grid-column:1;grid-row:1}}
 .grid8{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;position:sticky;top:calc(72px + env(safe-area-inset-top,0px))}
 @media (max-width:900px){.grid8{position:static}}
-.grid8 h4{font-family:var(--display);font-size:14px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:center;margin:0}
-.cell{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-height:86px;padding:8px 10px;font-size:14px;min-width:0}
-.cell .bl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-.cell.some{border-color:var(--sun)}
-.cell.full{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface))}
-.cell .item{margin-top:4px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
-.cell .item .lk{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-left:6px}
-.cell .leave{color:var(--muted);font-style:italic;margin-top:4px}
+.grid8{gap:10px}
+.grid8 h4{font-family:var(--display);font-size:18px;font-weight:800;letter-spacing:.02em;color:var(--fg);text-align:center;margin:0 0 2px}
+.cell{background:var(--surface);border:2px solid var(--line);border-radius:14px;min-height:132px;padding:10px 12px 12px;font-size:15px;min-width:0;box-shadow:0 2px 0 var(--line)}
+.cell .bl{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.cell.some{border-color:var(--sun);box-shadow:0 2px 0 var(--sun)}
+.cell.full{border-color:var(--accent);box-shadow:0 2px 0 var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--surface))}
+.cell .item{display:grid;grid-template-columns:40px 1fr;gap:4px 10px;align-items:center;margin-top:8px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.cell .item img{width:40px;height:28px;object-fit:cover;border-radius:6px;background:var(--line);grid-row:span 2}
+.cell .item .nm{font-size:15px}
+.cell .gl{justify-self:start;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);min-height:24px;line-height:1}
+.cell .gl.m-in{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.cell .gl.m-out{border-color:var(--fg);background:var(--fg);color:var(--bg)}
+.cell .gl.fixed{border-color:var(--accent);color:var(--accent)}
+.cell .leave{color:var(--muted);font-style:italic;margin-top:6px;font-size:14px}
+@media (max-width:900px){.cell .item{grid-template-columns:1fr}.cell .item img{display:none}}
 .lists h3{font-size:16px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
 .lists h3:first-child{margin-top:0}
 .rlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
@@ -584,7 +591,13 @@ function renderResults(){
     if (!BL[b]) { grid.append(el('div',{class:'cell'}, el('div',{class:'bl'}, rl), el('div',{class:'leave'}, 'Heading home'))); continue; }
     const items = pv.filter(({v}) => blocksOf(v, sched[v.id]).includes(b));
     const cell = el('div',{class:'cell ' + (used[b]>=CAP ? 'full' : used[b]>0 ? 'some' : '')}, el('div',{class:'bl'}, rl));
-    for (const {v} of items) cell.append(el('div',{class:'item'}, v.name, modeOf(v.id)==='in' ? el('span',{class:'lk'}, 'locked in') : null));
+    for (const {v} of items) {
+      const m = modeOf(v.id);
+      const pill = FIXED[v.id]
+        ? el('span',{class:'gl fixed'}, 'Always on')
+        : el('button',{type:'button', class:'gl m-'+m, title:'Tap to change', onclick:() => { const next = m==='free' ? 'in' : m==='in' ? 'out' : 'free'; setSched(v.id, {mode:next, block: next==='out' ? null : sched[v.id].block, full: next==='out' ? false : sched[v.id].full}); renderResults(); }}, m==='free' ? 'Unlocked' : m==='in' ? 'Locked in' : 'Locked out');
+      cell.append(el('div',{class:'item'}, el('img',{src:v.img, alt:''}), el('span',{class:'nm'}, v.name), pill));
+    }
     if (!items.length) cell.append(el('div',{class:'leave'}, 'Open'));
     grid.append(cell);
   }
