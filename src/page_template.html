@@ -154,6 +154,8 @@ a.gal{display:inline-flex;align-items:center;align-self:flex-start;border:1px so
   background:var(--bg);color:var(--fg);border-radius:14px;padding:14px 14px 18px;font-size:14px}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .lists{--bg:#f6efe2;--surface:#fffaf0;--fg:#23211d;--muted:#6b6459;--line:#e3d9c6;--accent:#0f6f73;--accent-ink:#ffffff;--pop:#e8603c;--sun:#e9b23a;color-scheme:light} }
 :root[data-theme="dark"] .lists{--bg:#f6efe2;--surface:#fffaf0;--fg:#23211d;--muted:#6b6459;--line:#e3d9c6;--accent:#0f6f73;--accent-ink:#ffffff;--pop:#e8603c;--sun:#e9b23a;color-scheme:light}
+.lsearch{width:100%;font:inherit;font-size:14px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);margin-bottom:4px}
+.lsearch::placeholder{color:var(--muted)}
 .lists h3{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
 .lists h3:first-child{margin-top:0}
 .rlist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:6px}
@@ -266,7 +268,10 @@ a.gal{display:inline-flex;align-items:center;align-self:flex-start;border:1px so
         <div class="gridhead"><button class="btn" id="shuffle">Shuffle the unlocked</button><p class="status" id="schedStatus"></p></div>
         <div class="grid8" id="grid8"></div>
       </div>
-      <div class="lists" id="lists"></div>
+      <div class="lists" id="listsWrap">
+        <input type="search" id="listSearch" class="lsearch" placeholder="Search events" autocomplete="off" aria-label="Search events">
+        <div id="lists"></div>
+      </div>
     </div>
     <form class="saverow" id="saveForm"><input type="text" id="saveName" placeholder="Name this version" autocomplete="off" maxlength="40"><button class="btn ghost" type="submit">Save this version</button><span class="note" id="saveNote"></span></form>
     <div id="savedbox" class="saved"></div>
@@ -548,6 +553,14 @@ $('#orderReset').addEventListener('click', () => { order = null; store.set('orde
 const BLOCKS = DATA.blocks, BL = Object.fromEntries(BLOCKS.map(b=>[b.id,b.label])), CAP = 2;
 let sched = store.get('sched', {});   // venueId -> {block, full, locked}
 let drafted = store.get('drafted', false);
+let listQuery = '';
+$('#listSearch').addEventListener('input', e => { listQuery = e.target.value.trim().toLowerCase(); filterList(); });
+function filterList(){
+  const q = listQuery;
+  for (const li of document.querySelectorAll('#lists .rlist > li')) { const t = li.dataset.search || ''; li.hidden = !!q && !t.includes(q); }
+  for (const ol of document.querySelectorAll('#lists .rlist')) { const h = ol.previousElementSibling; const any = [...ol.children].some(li => !li.hidden); if (h && h.tagName==='H3') h.hidden = !!q && !any; ol.hidden = !!q && !any; }
+  $('#listNone').hidden = !q || [...document.querySelectorAll('#lists .rlist > li')].some(li => !li.hidden);
+}
 function setSched(id, patch){ sched[id] = Object.assign({}, sched[id] || {mode:'free'}, patch); store.set('sched', sched); }
 // migrate older entries that used a locked flag
 function migrate(){ for (const [id, e] of Object.entries(sched)) if (e && !e.mode) e.mode = e.locked ? (e.block ? 'in' : 'out') : 'free'; }
@@ -567,7 +580,8 @@ function row(v, cat, pv){
   const cur = sched[v.id] || {}, mode = modeOf(v.id), taken = siblingPlaced(v);
   const when = cur.block ? (cur.full ? 'Sunday, full day' : BL[cur.block]) : null;
   const head = el('span',{style:'min-width:0'}, el('b',{}, v.name, when ? el('span',{class:'when'}, when) : null), el('small',{}, cat.label + ' · ' + v.when, ' ', el('button',{class:'more',type:'button',onclick:()=>openPanel(v)}, 'Learn more')));
-  if (FIXED[v.id]) return el('li',{class:'placed in'}, head, el('div',{class:'ctl'}, el('span',{class:'st'}, 'Always on, ' + BL[FIXED[v.id]])));
+  const dataSearch = (v.name + ' ' + cat.label + ' ' + (when||'') + ' ' + v.when).toLowerCase();
+  if (FIXED[v.id]) return el('li',{class:'placed in','data-search':dataSearch}, head, el('div',{class:'ctl'}, el('span',{class:'st'}, 'Always on, ' + BL[FIXED[v.id]])));
   const ctl = el('div',{class:'ctl'});
   const seg = el('div',{class:'seg', role:'group','aria-label':'Lock state'});
   for (const [m,label] of [['free','Unlocked'],['in','Locked in'],['out','Locked out']]) seg.append(el('button',{type:'button','aria-pressed': mode===m ? 'true' : 'false', class:'m-'+m, onclick:() => { if (mode===m) return; setSched(v.id, {mode:m, block: m==='out' ? null : cur.block, full: m==='out' ? false : cur.full}); renderResults(); }}, label));
@@ -578,7 +592,7 @@ function row(v, cat, pv){
   }
   const st = taken && !cur.block ? 'One salon only' : (mode==='in' && !cur.block) ? 'No room yet' : (mode==='free' && !cur.block) ? 'Did not fit' : '';
   if (st) ctl.append(el('span',{class:'st' + (st==='No room yet' ? ' out' : '')}, st));
-  return el('li',{class: (cur.block ? 'placed' : '') + ' ' + mode}, head, ctl);
+  return el('li',{class: (cur.block ? 'placed' : '') + ' ' + mode, 'data-search':dataSearch}, head, ctl);
 }
 function renderResults(){
   const lists = $('#lists'), grid = $('#grid8'); lists.replaceChildren(); grid.replaceChildren();
@@ -593,7 +607,9 @@ function renderResults(){
   const lockedOut = pv.filter(({v}) => modeOf(v.id)==='out');
   lists.append(el('h3',{}, `On the schedule (${on.length})`), el('ol',{class:'rlist'}, on.map(({v,cat}) => row(v,cat,pv))));
   lists.append(el('h3',{}, `Not on the schedule (${off.length})`), el('ol',{class:'rlist'}, off.map(({v,cat}) => row(v,cat,pv))));
-  lists.append(el('h3',{}, `Locked out (${lockedOut.length})`), el('ol',{class:'rlist'}, lockedOut.length ? lockedOut.map(({v,cat}) => row(v,cat,pv)) : [el('li',{class:'emptyrow'}, el('span',{class:'empty'}, 'Nothing locked out.'))]));
+  lists.append(el('h3',{}, `Locked out (${lockedOut.length})`), el('ol',{class:'rlist'}, lockedOut.length ? lockedOut.map(({v,cat}) => row(v,cat,pv)) : [el('li',{class:'emptyrow','data-search':'nothing locked out'}, el('span',{class:'empty'}, 'Nothing locked out.'))]));
+  lists.append(el('p',{class:'empty',id:'listNone',hidden:''}, 'No event matches that.'));
+  filterList();
   const used = usage(pv, null);
   const days = [['Sat','sat'],['Sun','sun'],['Mon','mon']], rows = [['Morning','am'],['Afternoon','pm'],['Night','night']];
   for (const [d] of days) grid.append(el('h4',{}, d));
